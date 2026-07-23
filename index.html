@@ -687,9 +687,28 @@ body {
   box-shadow: 0 8px 32px rgba(0,0,0,.5); border: 1px solid #2a2d52;
 }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* Password Lock */
+#pwdOverlay{position:fixed;z-index:99999;inset:0;background:#0a0b1e;display:flex;align-items:center;justify-content:center;flex-direction:column}
+#pwdOverlay .pwd-box{text-align:center;padding:48px 40px;border-radius:20px;background:linear-gradient(135deg,#141534,#1a1c42);border:1px solid #2a2d52;box-shadow:0 20px 60px rgba(0,0,0,.5);max-width:400px;width:90%}
+#pwdOverlay .pwd-icon{font-size:48px;margin-bottom:16px}
+#pwdOverlay h2{color:#c8b8ff;font-size:22px;margin:0 0 8px;font-weight:700}
+#pwdOverlay .pwd-sub{color:#8789bf;font-size:13px;margin:0 0 28px}
+#pwdOverlay input{width:100%;padding:14px 18px;border-radius:12px;border:1px solid #3a3d6e;background:#0e0f2a;color:#e8e0ff;font-size:16px;text-align:center;letter-spacing:4px;outline:0;box-sizing:border-box}
+#pwdOverlay input:focus{border-color:#7c6ff7;box-shadow:0 0 0 3px rgba(124,111,247,.2)}
+#pwdOverlay .pwd-err{color:#ff6b6b;font-size:13px;margin-top:12px;min-height:20px}
 </style>
 </head>
 <body>
+<div id="pwdOverlay">
+  <div class="pwd-box">
+    <div class="pwd-icon">🔐</div>
+    <h2>科技特长生规划报告</h2>
+    <p class="pwd-sub">请输入访问密码查看内容</p>
+    <input type="password" id="pwdInput" placeholder="请输入密码" autofocus>
+    <div class="pwd-err" id="pwdErr"></div>
+  </div>
+</div>
 
 <div class="top-bar" id="topBar">
   <div class="logo">
@@ -838,6 +857,24 @@ body {
 </div>
 
 <script>
+// ========== PASSWORD LOCK ==========
+(async function(){
+  if(sessionStorage.getItem('_tt_auth')){ el('pwdOverlay').remove(); return; }
+  const HASH='ed46ae7d9c501abe9ad982614f07ad0c4dc0f2adc9bb5004ea4b20936bd6b060';
+  async function sha256(t){const e=new TextEncoder().encode(t);const h=await crypto.subtle.digest('SHA-256',e);return Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,'0')).join('');}
+  el('pwdInput').addEventListener('keydown',async function(ev){
+    if(ev.key!=='Enter'){el('pwdErr').textContent='';return;}
+    const v=this.value.trim();
+    if(!v){el('pwdErr').textContent='请输入密码';return;}
+    if(await sha256(v)!==HASH){el('pwdErr').textContent='密码错误，请重试';this.value='';return;}
+    sessionStorage.setItem('_tt_auth','1');
+    el('pwdOverlay').style.opacity='0';
+    el('pwdOverlay').style.transition='opacity .3s';
+    setTimeout(()=>el('pwdOverlay').remove(),350);
+  });
+  async function el(id){return document.getElementById(id);}
+})();
+
 const DB_NAME = 'tt_planner';
 let db, currentId = null, currentStudent = null, editMode = null;
 let memStore = [], useMemory = false, memIdCounter = 1;
