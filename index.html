@@ -1,0 +1,1718 @@
+<!-- ============================================
+     科技特长生个性化规划报告生成器
+     Version: 1.0.0
+     归档日期: 2026-07-20
+     归档目录: versions/v1.0.0/
+     ============================================ -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="version" content="1.0.0">
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<title>科技特长生成长规划 - C++学习蓝图</title>
+<style>
+:root {
+  --bg: #0a0b14;
+  --bg2: #14152a;
+  --card: #1a1c38;
+  --card2: #1f2245;
+  --border: #2a2d52;
+  --text: #e8eaf6;
+  --text2: #9da3c7;
+  --text3: #6b7199;
+  --purple: #7c3aed;
+  --purple-light: #a78bfa;
+  --pink: #ec4899;
+  --pink-light: #f9a8d4;
+  --blue: #3b82f6;
+  --blue-light: #93c5fd;
+  --cyan: #06b6d4;
+  --cyan-light: #67e8f9;
+  --emerald: #10b981;
+  --emerald-light: #6ee7b7;
+  --amber: #f59e0b;
+  --amber-light: #fcd34d;
+  --rose: #f43f5e;
+  --rose-light: #fda4af;
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* ====== HEADER BAR ====== */
+.top-bar {
+  display: flex; align-items: center; gap: 16px;
+  padding: 14px 28px;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 50;
+  backdrop-filter: blur(20px);
+}
+.top-bar .logo { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
+.top-bar .logo span:nth-child(1) { color: var(--purple-light); }
+.top-bar .logo span:nth-child(2) { color: var(--pink-light); }
+.top-bar .logo span:nth-child(3) { color: var(--cyan-light); }
+.top-bar select, .top-bar input {
+  padding: 8px 14px; border-radius: 8px; border: 1px solid var(--border);
+  background: var(--card); color: var(--text); font-size: 13px; font-family: inherit;
+  outline: none; transition: border-color 0.2s;
+}
+.top-bar select:focus, .top-bar input:focus { border-color: var(--purple); }
+.top-bar .spacer { flex: 1; }
+.btn {
+  padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer;
+  font-size: 13px; font-weight: 600; font-family: inherit; transition: all 0.2s;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.btn-primary { background: linear-gradient(135deg, var(--purple), var(--pink)); color: #fff; }
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(124,58,237,0.3); }
+.btn-ghost { background: transparent; color: var(--text2); border: 1px solid var(--border); }
+.btn-ghost:hover { background: var(--card); color: var(--text); }
+.btn-success { background: linear-gradient(135deg, #059669, #10b981); color: #fff; }
+
+/* ====== REPORT CONTAINER ====== */
+.report-wrapper {
+  max-width: 900px; margin: 0 auto; padding: 40px 24px 60px;
+  background: var(--bg);
+}
+
+/* ====== HERO CARD ====== */
+.hero {
+  background: linear-gradient(135deg, #1a1040 0%, #1a1245 25%, #1a1540 50%, #201040 75%, #1a1035 100%);
+  border-radius: 24px; padding: 28px 32px 22px; text-align: center;
+  border: 1px solid rgba(124,58,237,0.2);
+  position: relative; overflow: hidden;
+  margin-bottom: 20px;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 30% 20%, rgba(124,58,237,0.15) 0%, transparent 50%),
+              radial-gradient(ellipse at 70% 80%, rgba(236,72,153,0.1) 0%, transparent 50%),
+              radial-gradient(ellipse at 50% 50%, rgba(6,182,212,0.08) 0%, transparent 50%);
+  pointer-events: none;
+}
+.hero .hero-logo {
+  position: absolute;
+  top: 12px; left: 20px;
+  height: 70px;
+  opacity: 0.7;
+  z-index: 2;
+  pointer-events: none;
+  filter: none;
+  transition: opacity 0.3s;
+}
+.hero .hero-logo:hover { opacity: 0.9; }
+.hero .badge {
+  display: inline-block; padding: 3px 14px; border-radius: 20px;
+  font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  background: rgba(124,58,237,0.15); color: var(--purple-light); margin-bottom: 10px;
+  border: 1px solid rgba(124,58,237,0.25);
+}
+.hero .hero-name {
+  font-size: 44px; font-weight: 900; letter-spacing: -1px;
+  background: linear-gradient(135deg, #c4b5fd, #f9a8d4, #67e8f9);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  margin-bottom: 6px; line-height: 1.2;
+}
+.hero .hero-slogan {
+  font-size: 14px; color: var(--text2); font-weight: 400; margin-bottom: 14px;
+}
+.hero .hero-stats {
+  display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.hero .stat-item {
+  text-align: center;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 8px 18px;
+  min-width: 90px;
+  backdrop-filter: blur(4px);
+}
+.hero .stat-value {
+  font-size: 26px; font-weight: 900;
+  background: linear-gradient(135deg, var(--purple-light), var(--pink-light));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  line-height: 1.1;
+  letter-spacing: -1px;
+}
+.hero .stat-label {
+  font-size: 10px; color: var(--text3); font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px;
+  margin-top: 3px;
+}
+.hero .hero-info-chips {
+  display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;
+}
+.hero .hero-info-chips .info-chip {
+  padding: 5px 12px; border-radius: 20px;
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+  font-size: 12px;
+}
+.hero .hero-info-chips .info-chip .chip-dot { width: 6px; height: 6px; }
+.hero .hero-info-chips .info-chip .chip-label { font-size: 10px; }
+.hero .hero-info-chips .info-chip .chip-value { font-size: 12px; }
+
+/* ====== SECTION TITLE ====== */
+.section-title {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 14px; margin-top: 20px;
+  font-size: 18px; font-weight: 700;
+}
+.section-title .s-icon {
+  width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+
+/* ====== CARDS ====== */
+.card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 28px; margin-bottom: 20px;
+  position: relative; overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+}
+.card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(124,58,237,0.3), transparent);
+}
+.card-accent-purple::before { background: linear-gradient(90deg, transparent, var(--purple), transparent); }
+.card-accent-pink::before { background: linear-gradient(90deg, transparent, var(--pink), transparent); }
+.card-accent-cyan::before { background: linear-gradient(90deg, transparent, var(--cyan), transparent); }
+.card-accent-emerald::before { background: linear-gradient(90deg, transparent, var(--emerald), transparent); }
+.card-accent-amber::before { background: linear-gradient(90deg, transparent, var(--amber), transparent); }
+.card-accent-purple { border-left: 3px solid var(--purple); }
+.card-accent-pink { border-left: 3px solid var(--pink); }
+.card-accent-cyan { border-left: 3px solid var(--cyan); }
+.card-accent-emerald { border-left: 3px solid var(--emerald); }
+.card-accent-amber { border-left: 3px solid var(--amber); }
+
+/* ====== PRAISE BOX ====== */
+.praise-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+}
+.praise-card {
+  background: var(--card2); border-radius: var(--radius-sm); padding: 20px;
+  border: 1px solid var(--border); transition: transform 0.2s, box-shadow 0.2s;
+  position: relative; overflow: hidden;
+}
+.praise-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+.praise-card::after {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--pink-light), var(--purple-light));
+}
+.praise-card .p-icon {
+  font-size: 28px; margin-bottom: 10px;
+}
+.praise-card .p-title {
+  font-size: 14px; font-weight: 700; margin-bottom: 6px; color: var(--text);
+}
+.praise-card .p-desc {
+  font-size: 12px; color: var(--text2); line-height: 1.6;
+}
+.praise-card .p-stars {
+  font-size: 14px; margin-top: 10px; letter-spacing: 2px;
+}
+
+/* ====== COMBINED EVALUATION ====== */
+.combined-evaluation-card {
+  border-left: 3px solid var(--pink);
+  position: relative;
+}
+.combined-evaluation-card::after {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--pink-light), var(--purple-light));
+}
+.evaluation-row {
+  display: flex; gap: 24px; align-items: stretch;
+}
+.evaluation-left {
+  flex: 1; min-width: 0;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.evaluation-right {
+  flex: 1.2; min-width: 220px;
+  display: flex; flex-direction: column; gap: 12px;
+  align-items: stretch; justify-content: flex-start;
+  padding-left: 20px;
+  border-left: 1px solid var(--border);
+}
+.praise-grid-compact {
+  grid-template-columns: repeat(2, 1fr); gap: 10px;
+}
+.praise-card-compact {
+  padding: 12px 14px;
+}
+.praise-card-compact .p-icon {
+  font-size: 22px; margin-bottom: 6px;
+}
+.praise-card-compact .p-title {
+  font-size: 12px; font-weight: 700; margin-bottom: 4px;
+}
+.praise-card-compact .p-desc {
+  font-size: 11px; line-height: 1.5;
+}
+.praise-card-compact .p-stars {
+  font-size: 12px; margin-top: 6px; letter-spacing: 1px;
+}
+.evaluation-summary {
+  padding-top: 14px; padding-bottom: 4px;
+  border-top: 1px solid var(--border);
+  display: flex; align-items: flex-start; gap: 10px;
+}
+.evaluation-summary-full {
+  margin-top: 12px; padding-top: 14px; padding-bottom: 4px;
+  border-top: 1px solid var(--border);
+  display: flex; align-items: flex-start; gap: 10px;
+}
+.ability-bars-compact { width: 100%; }
+.ability-bars-compact .bar-group { margin-bottom: 12px; }
+.ability-bars-compact .bar-group .bar-label-row { font-size: 12px; margin-bottom: 5px; }
+.ability-bars-compact .bar-track { height: 8px; border-radius: 4px; }
+.radar-wrap { display: flex; justify-content: center; }
+
+@media (max-width: 720px) {
+  .evaluation-row { flex-direction: column; }
+  .evaluation-right { border-left: none; border-top: 1px solid var(--border); padding-left: 0; padding-top: 16px; }
+  .praise-grid-compact { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ====== INFO ROW ====== */
+.info-row {
+  display: flex; flex-wrap: wrap; gap: 12px;
+}
+.info-chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 18px; border-radius: 30px;
+  background: var(--card2); border: 1px solid var(--border);
+  font-size: 13px;
+}
+.info-chip .chip-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+}
+.info-chip .chip-label { color: var(--text3); font-size: 11px; }
+.info-chip .chip-value { font-weight: 600; }
+
+/* ====== PROGRESS BARS ====== */
+.bar-group { margin-bottom: 14px; }
+.bar-group .bar-label-row { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 13px; }
+.bar-group .bar-label { font-weight: 600; }
+.bar-group .bar-pct { color: var(--text3); font-weight: 500; }
+.bar-group .bar-track {
+  height: 8px; border-radius: 4px; background: rgba(255,255,255,0.06);
+  overflow: hidden;
+}
+.bar-group .bar-fill {
+  height: 100%; border-radius: 4px; transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* ====== RANGE SLIDER ====== */
+#abilityPanel input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255,255,255,0.08);
+  outline: none;
+  cursor: pointer;
+}
+#abilityPanel input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #7c3aed;
+  border: 2px solid #a78bfa;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(124,58,237,0.4);
+  transition: transform .15s;
+}
+#abilityPanel input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+#abilityPanel input[type="range"]::-moz-range-thumb {
+  width: 18px; height: 18px; border-radius: 50%;
+  background: #7c3aed; border: 2px solid #a78bfa;
+  cursor: pointer; box-shadow: 0 0 8px rgba(124,58,237,0.4);
+}
+.timeline-v {
+  display: flex; gap: 16px; overflow-x: auto; padding-bottom: 8px;
+  scroll-snap-type: x mandatory;
+}
+.tl-card {
+  min-width: 160px; flex: 1; background: var(--card2); border-radius: var(--radius-sm);
+  border: 1px solid var(--border); padding: 20px; text-align: center;
+  scroll-snap-align: start; position: relative;
+}
+.tl-card .tl-phase {
+  font-size: 11px; font-weight: 700; letter-spacing: 1px; margin-bottom: 8px;
+}
+.tl-card .tl-icon { font-size: 32px; margin-bottom: 10px; }
+.tl-card .tl-title { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+.tl-card .tl-time { font-size: 11px; color: var(--text3); margin-bottom: 8px; }
+.tl-card .tl-desc { font-size: 11px; color: var(--text2); line-height: 1.5; }
+.tl-card .tl-check {
+  display: inline-block; width: 28px; height: 28px; border-radius: 50%;
+  border: 2px solid var(--border); margin-top: 10px; cursor: pointer;
+  transition: all 0.3s; font-size: 14px; line-height: 24px;
+}
+.tl-card .tl-check.done {
+  background: var(--emerald); border-color: var(--emerald);
+}
+.tl-card .tl-check.done::after { content: '✓'; color: #fff; }
+.tl-arrow {
+  display: flex; align-items: center; color: var(--text3); font-size: 20px;
+  min-width: 24px; justify-content: center;
+}
+
+/* ====== PARENT SECTION ====== */
+.parent-cards {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+}
+.parent-card {
+  background: var(--card2); border-radius: var(--radius-sm); padding: 16px;
+  border: 1px solid var(--border);
+  position: relative; overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.parent-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+}
+.parent-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+}
+.parent-card:nth-child(1)::before { background: linear-gradient(90deg, var(--purple), var(--pink)); }
+.parent-card:nth-child(2)::before { background: linear-gradient(90deg, var(--cyan), var(--blue)); }
+.parent-card:nth-child(3)::before { background: linear-gradient(90deg, var(--emerald), var(--amber)); }
+.parent-card .pc-num {
+  font-size: 36px; font-weight: 900;
+  background: linear-gradient(135deg, var(--purple-light), var(--pink-light));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  margin-bottom: 8px; line-height: 1;
+  opacity: 0.7;
+}
+.parent-card .pc-title { font-size: 15px; font-weight: 700; margin-bottom: 10px; line-height: 1.4; }
+.parent-card .pc-text { font-size: 12px; color: var(--text2); line-height: 1.8; }
+
+/* ====== TARGET PATH (升学路线) ====== */
+.path-flow {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: center;
+  padding: 8px 0;
+}
+.path-node {
+  padding: 12px 20px; border-radius: 30px; font-size: 13px; font-weight: 700;
+  text-align: center; min-width: 100px;
+}
+.path-arrow { font-size: 18px; color: var(--text3); }
+
+/* ====== REGION BOX ====== */
+.region-box {
+  background: linear-gradient(135deg, rgba(6,182,212,0.06), rgba(124,58,237,0.06));
+  border: 1px solid rgba(6,182,212,0.15); border-radius: var(--radius);
+  padding: 24px; margin-bottom: 20px;
+}
+.region-box .region-header { font-size: 14px; font-weight: 700; color: var(--cyan-light); margin-bottom: 10px; }
+.region-box .region-text { font-size: 13px; color: var(--text); line-height: 1.8; }
+
+/* ====== CUSTOM SELECT (Province) ====== */
+.custom-select .cs-trigger {
+  padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border);
+  background: var(--card); color: var(--text); font-size: 13px; font-family: inherit;
+  display: flex; justify-content: space-between; align-items: center; cursor: pointer;
+  transition: border-color 0.2s;
+}
+.custom-select .cs-trigger:hover { border-color: var(--purple); }
+.custom-select .cs-dropdown {
+  position: absolute; top: 100%; left: 0; right: 0; max-height: 340px; overflow: auto;
+  background: var(--card2); border: 1px solid var(--border); border-radius: 8px;
+  z-index: 100; margin-top: 4px; box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+.custom-select .cs-search { padding: 10px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--card2); z-index: 2; }
+.custom-select .cs-search input {
+  width: 100%; padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border);
+  background: var(--card); color: var(--text); font-size: 13px; font-family: inherit; outline: none;
+}
+.custom-select .cs-letters {
+  display: flex; flex-wrap: wrap; gap: 4px; padding: 8px 10px; border-bottom: 1px solid var(--border);
+  position: sticky; top: 46px; background: var(--card2); z-index: 2;
+}
+.custom-select .cs-letters span {
+  width: 26px; height: 26px; display: flex; align-items: center; justify-content: center;
+  border-radius: 6px; font-size: 11px; font-weight: 700; color: var(--text2); cursor: pointer;
+  background: rgba(255,255,255,0.04); transition: all 0.15s;
+}
+.custom-select .cs-letters span:hover { background: var(--purple); color: #fff; }
+.custom-select .cs-group-title {
+  padding: 6px 14px; font-size: 11px; font-weight: 700; color: var(--text3);
+  background: rgba(255,255,255,0.03); text-transform: uppercase; letter-spacing: 1px;
+}
+.custom-select .cs-item {
+  padding: 10px 14px; font-size: 13px; color: var(--text); cursor: pointer;
+  border-bottom: 1px solid rgba(255,255,255,0.03); transition: background 0.15s;
+}
+.custom-select .cs-item:hover { background: rgba(124,58,237,0.12); color: var(--purple-light); }
+.custom-select .cs-item.selected { background: rgba(124,58,237,0.2); color: var(--purple-light); font-weight: 600; }
+
+/* ====== MODAL ====== */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: flex;
+  align-items: center; justify-content: center; z-index: 100;
+}
+.modal {
+  background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 28px; width: 90%; max-width: 580px; max-height: 80vh; overflow-y: auto;
+}
+.modal h3 { font-size: 20px; margin-bottom: 16px; }
+.modal label { display: block; font-size: 12px; color: var(--text3); font-weight: 600; margin: 12px 0 4px; text-transform: uppercase; letter-spacing: 1px; }
+.modal input, .modal select, .modal textarea {
+  width: 100%; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border);
+  background: var(--bg); color: var(--text); font-size: 14px; font-family: inherit;
+}
+.modal textarea { min-height: 80px; resize: vertical; }
+.modal input:focus, .modal select:focus, .modal textarea:focus { outline: none; border-color: var(--purple); }
+.modal .modal-actions { display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end; }
+
+/* ====== STUDENT LIST POPOVER ====== */
+.student-list-pop {
+  position: absolute; top: 100%; left: 0; background: var(--card);
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  min-width: 220px; max-height: 300px; overflow-y: auto; z-index: 60;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5); margin-top: 4px; display: none;
+}
+.student-list-pop.show { display: block; }
+.student-list-pop .sl-item {
+  padding: 10px 16px; cursor: pointer; font-size: 13px; transition: background 0.15s;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.student-list-pop .sl-item:hover { background: var(--card2); }
+.student-list-pop .sl-item.active { background: rgba(124,58,237,0.1); color: var(--purple-light); }
+.student-list-pop .sl-item .sl-del {
+  opacity: 0; font-size: 16px; color: var(--rose); transition: opacity 0.15s;
+}
+.student-list-pop .sl-item:hover .sl-del { opacity: 1; }
+
+/* ====== FOOTER MESSAGE ====== */
+.footer-message {
+  text-align: center;
+  padding: 24px 20px;
+  margin-top: 8px;
+  background: var(--card2);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.footer-message::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--purple-light), var(--pink-light), transparent);
+}
+.footer-message-icon {
+  font-size: 24px;
+  margin-bottom: 6px;
+}
+.footer-message-text {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.footer-message-sub {
+  font-size: 13px;
+  color: var(--text2);
+  margin-bottom: 6px;
+}
+.footer-message-name {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--purple-light);
+  letter-spacing: 1px;
+}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 768px) {
+  .report-wrapper { padding: 20px 14px 40px; }
+  .hero { padding: 28px 20px; }
+  .hero .hero-name { font-size: 34px; }
+  .hero .hero-stats { gap: 16px; }
+  .timeline-v { flex-direction: column; }
+  .tl-arrow { transform: rotate(90deg); }
+}
+
+/* ====== REGION ANALYSIS ====== */
+.region-analysis-box {
+  background: var(--card2);
+  border-radius: var(--radius);
+  padding: 24px 28px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--cyan);
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.region-analysis-box::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(6,182,212,0.3), transparent);
+}
+.region-analysis-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.region-analysis-text {
+  font-size: 13px;
+  line-height: 1.9;
+  color: var(--text);
+}
+
+/* ====== POLICY IMAGE SECTION ====== */
+.policy-img-section {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+.policy-img-title-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 24px;
+  background: var(--card2);
+  border-bottom: 1px solid var(--border);
+}
+.policy-img-title-icon {
+  font-size: 18px;
+}
+.policy-img-title-text {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--cyan-light);
+}
+
+/* ====== POLICY IMAGES ====== */
+.policy-img-row {
+  display: grid;
+  gap: 20px;
+  padding: 24px;
+}
+/* 1张图: 单列居中，限制最大宽度 */
+.policy-img-row:has(> .policy-img-col:only-child) {
+  grid-template-columns: 1fr;
+  max-width: 680px;
+  margin: 0 auto;
+}
+/* 2张图: 两列 */
+.policy-img-row:has(> .policy-img-col:nth-child(2):last-child) {
+  grid-template-columns: repeat(2, 1fr);
+}
+/* 3张及以上: 两列排列 */
+.policy-img-row:has(> .policy-img-col:nth-child(3)) {
+  grid-template-columns: repeat(2, 1fr);
+}
+.policy-img-col {
+  min-width: 0;
+}
+.policy-img-box {
+  background: var(--card2);
+  border-radius: 16px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.policy-img-box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+}
+.policy-img-box img {
+  display: block;
+  width: 100%;
+  border-radius: 10px;
+  object-fit: contain;
+  background: var(--bg);
+  min-height: 0;
+  border: 1px solid var(--border);
+}
+/* Responsive: stack on narrow screens */
+@media (max-width: 640px) {
+  .policy-img-row { grid-template-columns: 1fr !important; padding: 16px; }
+  .parent-cards { grid-template-columns: 1fr; }
+  .praise-grid { grid-template-columns: 1fr; }
+  .praise-grid-compact { grid-template-columns: 1fr; }
+  .evaluation-row { flex-direction: column; }
+  .evaluation-right { border-left: none; border-top: 1px solid var(--border); padding-left: 0; padding-top: 16px; }
+}
+
+/* PRINT (screenshot mode) */
+@media print {
+  body { background: #fff; color: #111; }
+  .top-bar { display: none; }
+  .report-wrapper { max-width: 100%; padding: 20px; }
+  .card, .hero, .region-box, .praise-card, .parent-card, .tl-card { background: #fff; border-color: #ddd; break-inside: avoid; }
+  .hero .hero-name { -webkit-text-fill-color: #7c3aed; }
+  .hero .stat-value { -webkit-text-fill-color: #7c3aed; }
+  .tl-check { display: none; }
+}
+
+/* Toast */
+.toast {
+  position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%);
+  background: #1f2245; color: #e8eaf6; padding: 14px 28px; border-radius: 14px;
+  font-size: 14px; font-weight: 600; z-index: 9999; opacity: 0; pointer-events: none;
+  transition: opacity .3s, transform .3s; transform: translateX(-50%) translateY(12px);
+  box-shadow: 0 8px 32px rgba(0,0,0,.5); border: 1px solid #2a2d52;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="top-bar" id="topBar">
+  <div class="logo">
+    <span>科</span><span>技</span><span>特长生</span>
+  </div>
+  <div style="position:relative">
+    <button class="btn btn-ghost" onclick="toggleStudentList()" id="studentBtn">
+      📋 <span id="currentStudentLabel">选择学生</span> ▾
+    </button>
+    <div class="student-list-pop" id="studentPop"></div>
+  </div>
+  <div class="spacer"></div>
+  <button class="btn btn-ghost btn-sm" onclick="importStudents()">📥 导入</button>
+  <button class="btn btn-ghost btn-sm" onclick="screenshotReport()" id="screenshotBtn">📸 一键截图</button>
+  <button class="btn btn-ghost btn-sm" onclick="exportStudents()">📤 导出</button>
+  <button class="btn btn-ghost btn-sm" onclick="showSettings()">⚙️ 设置</button>
+  <button class="btn btn-primary" onclick="showNewStudent()">+ 新建档案</button>
+</div>
+
+<div class="report-wrapper" id="reportWrapper">
+  <!-- Empty state -->
+  <div id="emptyState" style="text-align:center;padding:80px 20px">
+    <div style="font-size:72px;margin-bottom:20px">🚀</div>
+    <h2 style="font-size:28px;font-weight:800;margin-bottom:12px;background:linear-gradient(135deg,#c4b5fd,#f9a8d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">科技特长生 · 成长规划报告</h2>
+    <p style="color:var(--text2);font-size:15px;line-height:1.8;margin-bottom:24px">为孩子定制专属 C++ 学习蓝图<br>让每一次进步都被看见</p>
+      <button class="btn btn-primary" style="font-size:15px;padding:12px 32px" onclick="showNewStudent()">开始创建 →</button>
+      <div style="margin-top:12px">
+        <button class="btn btn-ghost btn-sm" onclick="loadDemoStudent()">📋 加载示例档案（沈沐泽）</button>
+      </div>
+    </div>
+
+  <!-- Report Content -->
+  <div id="reportContent" style="display:none"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- New/Edit Student Modal -->
+<div class="modal-overlay" id="modalOverlay" style="display:none">
+  <div class="modal">
+    <h3 id="modalTitle">新建学生档案</h3>
+    <label>学生姓名</label>
+    <input type="text" id="mName" placeholder="请输入学生姓名">
+    <label>老师姓名 <span style="color:var(--text3);font-weight:400">（默认从设置读取，可单独修改）</span></label>
+    <input type="text" id="mTeacher" placeholder="例如：张老师">
+    <label>当前年级</label>
+    <select id="mGrade"></select>
+    <label>当前阶段</label>
+    <select id="mStage"></select>
+    <label>所在省份</label>
+    <div class="custom-select" id="provinceSelectWrap" style="position:relative">
+      <div class="cs-trigger" onclick="toggleProvinceDropdown()">
+        <span id="csProvinceText">请选择</span>
+        <span style="color:var(--text3)">▾</span>
+      </div>
+      <div class="cs-dropdown" id="csProvinceDropdown" style="display:none">
+        <div class="cs-search">
+          <input type="text" id="csProvinceSearch" placeholder="搜索省份..." oninput="filterProvinces(this.value)">
+        </div>
+        <div class="cs-letters" id="csProvinceLetters"></div>
+        <div class="cs-list" id="csProvinceList"></div>
+      </div>
+      <select id="mProvince" onchange="onModalProvince()" style="display:none"></select>
+    </div>
+    <label>所在市区</label>
+    <select id="mCity"></select>
+    <label>评价等级</label>
+    <div style="display:flex;align-items:center;gap:6px;margin-top:4px">
+      <input type="range" id="mRating" min="1" max="5" value="5" style="flex:1" oninput="this.nextElementSibling.textContent='🌟'.repeat(this.value)">
+      <span style="font-size:22px">🌟🌟🌟🌟🌟</span>
+    </div>
+    <label>自定义优势描述 <span style="color:var(--text3);font-weight:400;text-transform:none">（选填，留空则自动生成）</span></label>
+    <textarea id="mAdvantage" placeholder="例如：孩子从小对编程充满热情，逻辑思维能力强..."></textarea>
+
+    <div class="ability-section" style="margin-top:16px">
+      <div style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;margin-bottom:12px" onclick="toggleAbilityPanel()">
+        <label style="margin-bottom:0">能力评估 <span style="color:var(--text3);font-weight:400">(可自定义调节，默认由评分自动生成)</span></label>
+        <span id="abilityToggleIcon" style="font-size:14px;color:var(--text3)">▶</span>
+      </div>
+      <div id="abilityPanel" style="display:none">
+        <div style="margin-bottom:14px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+            <span style="font-size:13px;color:var(--text)">编程基础</span>
+            <span id="mAprogVal" style="font-size:12px;color:var(--emerald-light);font-weight:600">100%</span>
+          </div>
+          <input type="range" id="mAprog" min="0" max="100" value="100" style="width:100%" oninput="document.getElementById('mAprogVal').textContent=this.value+'%';document.getElementById('mAprogVal').style.color='var(--emerald-light)'">
+        </div>
+        <div style="margin-bottom:14px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+            <span style="font-size:13px;color:var(--text)">算法思维</span>
+            <span id="mAalgoVal" style="font-size:12px;color:var(--cyan-light);font-weight:600">90%</span>
+          </div>
+          <input type="range" id="mAalgo" min="0" max="100" value="90" style="width:100%" oninput="document.getElementById('mAalgoVal').textContent=this.value+'%';document.getElementById('mAalgoVal').style.color='var(--cyan-light)'">
+        </div>
+        <div style="margin-bottom:14px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+            <span style="font-size:13px;color:var(--text)">竞赛经验</span>
+            <span id="mAcontestVal" style="font-size:12px;color:var(--purple-light);font-weight:600">90%</span>
+          </div>
+          <input type="range" id="mAcontest" min="0" max="100" value="90" style="width:100%" oninput="document.getElementById('mAcontestVal').textContent=this.value+'%';document.getElementById('mAcontestVal').style.color='var(--purple-light)'">
+        </div>
+        <div style="margin-bottom:14px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+            <span style="font-size:13px;color:var(--text)">数学基础</span>
+            <span id="mAmathVal" style="font-size:12px;color:var(--pink-light);font-weight:600">90%</span>
+          </div>
+          <input type="range" id="mAmath" min="0" max="100" value="90" style="width:100%" oninput="document.getElementById('mAmathVal').textContent=this.value+'%';document.getElementById('mAmathVal').style.color='var(--pink-light)'">
+        </div>
+        <div style="margin-bottom:14px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+            <span style="font-size:13px;color:var(--text)">学习态度</span>
+            <span id="mAattitudeVal" style="font-size:12px;color:var(--amber-light);font-weight:600">100%</span>
+          </div>
+          <input type="range" id="mAattitude" min="0" max="100" value="100" style="width:100%" oninput="document.getElementById('mAattitudeVal').textContent=this.value+'%';document.getElementById('mAattitudeVal').style.color='var(--amber-light)'">
+        </div>
+        <div style="margin-bottom:6px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+            <span style="font-size:13px;color:var(--text)">发展潜力</span>
+            <span id="mApotentialVal" style="font-size:12px;color:var(--blue-light);font-weight:600">100%</span>
+          </div>
+          <input type="range" id="mApotential" min="0" max="100" value="100" style="width:100%" oninput="document.getElementById('mApotentialVal').textContent=this.value+'%';document.getElementById('mApotentialVal').style.color='var(--blue-light)'">
+        </div>
+        <button class="btn btn-sm" style="margin-top:8px" onclick="resetAbilityDefaults()">恢复默认值</button>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="modalDeleteBtn" style="display:none;margin-right:auto;color:var(--rose);border-color:var(--rose)" onclick="deleteCurrentStudent()">🗑️ 删除</button>
+      <button class="btn btn-ghost" onclick="closeModal()">取消</button>
+      <button class="btn btn-primary" onclick="saveModalStudent()">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- Settings Modal -->
+<div class="modal-overlay" id="settingsOverlay" style="display:none">
+  <div class="modal" style="max-width:400px">
+    <h3>⚙️ 系统设置</h3>
+    <label>默认老师姓名</label>
+    <input type="text" id="sTeacher" placeholder="例如：张老师" value="">
+    <div style="font-size:12px;color:var(--text3);margin-top:4px">新建学生档案时，老师姓名将默认使用此值</div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeSettings()">取消</button>
+      <button class="btn btn-primary" onclick="saveSettings()">保存</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const DB_NAME = 'tt_planner';
+let db, currentId = null, currentStudent = null, editMode = null;
+let DATA = { cities: [{"province": "安徽省", "city": "合肥", "region": "华东地区", "script": "安徽是编程成绩比较强的省，例如安徽师范附中、马鞍山二中等，都在NOI中有很出色的成绩。2023年，安徽师范附中的NOI国赛成绩中，就有4个学生斩获1个金牌3个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n安徽的重点学校也有科技特长生政策，例如淮南一中、淮南二中、安徽师范附中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "安徽省", "city": "芜湖", "region": "华东地区", "script": "安徽是编程成绩比较强的省，例如安徽师范附中、马鞍山二中等，都在NOI中有很出色的成绩。2023年，安徽师范附中的NOI国赛成绩中，就有4个学生斩获1个金牌3个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n安徽的重点学校也有科技特长生政策，例如淮南一中、淮南二中、安徽师范附中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "安徽省", "city": "蚌埠", "region": "华东地区", "script": "安徽是编程成绩比较强的省，例如安徽师范附中、马鞍山二中等，都在NOI中有很出色的成绩。2023年，安徽师范附中的NOI国赛成绩中，就有4个学生斩获1个金牌3个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n安徽的重点学校也有科技特长生政策，例如淮南一中、淮南二中、安徽师范附中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "安徽省", "city": "淮南", "region": "华东地区", "script": "安徽是编程成绩比较强的省，例如安徽师范附中、马鞍山二中等，都在NOI中有很出色的成绩。2023年，安徽师范附中的NOI国赛成绩中，就有4个学生斩获1个金牌3个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n安徽的重点学校也有科技特长生政策，例如淮南一中、淮南二中、安徽师范附中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "安徽省", "city": "马鞍山", "region": "华东地区", "script": "安徽是编程成绩比较强的省，例如安徽师范附中、马鞍山二中等，都在NOI中有很出色的成绩。2023年，安徽师范附中的NOI国赛成绩中，就有4个学生斩获1个金牌3个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n安徽的重点学校也有科技特长生政策，例如淮南一中、淮南二中、安徽师范附中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "安徽省", "city": "淮北", "region": "华东地区", "script": "安徽是编程成绩比较强的省，例如安徽师范附中、马鞍山二中等，都在NOI中有很出色的成绩。2023年，安徽师范附中的NOI国赛成绩中，就有4个学生斩获1个金牌3个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n安徽的重点学校也有科技特长生政策，例如淮南一中、淮南二中、安徽师范附中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "安徽省", "city": "铜陵", "region": "华东地区", "script": "安徽是编程成绩比较强的省，例如安徽师范附中、马鞍山二中等，都在NOI中有很出色的成绩。2023年，安徽师范附中的NOI国赛成绩中，就有4个学生斩获1个金牌3个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n安徽的重点学校也有科技特长生政策，例如淮南一中、淮南二中、安徽师范附中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "安徽省", "city": "安庆", "region": "华东地区", "script": "安徽是编程成绩比较强的省，例如安徽师范附中、马鞍山二中等，都在NOI中有很出色的成绩。2023年，安徽师范附中的NOI国赛成绩中，就有4个学生斩获1个金牌3个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n安徽的重点学校也有科技特长生政策，例如淮南一中、淮南二中、安徽师范附中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "安徽省", "city": "黄山", "region": "华东地区", "script": "安徽是编程成绩比较强的省，例如安徽师范附中、马鞍山二中等，都在NOI中有很出色的成绩。2023年，安徽师范附中的NOI国赛成绩中，就有4个学生斩获1个金牌3个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n安徽的重点学校也有科技特长生政策，例如淮南一中、淮南二中、安徽师范附中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "安徽省", "city": "阜阳", "region": "华东地区", "script": "安徽是编程成绩比较强的省，例如安徽师范附中、马鞍山二中等，都在NOI中有很出色的成绩。2023年，安徽师范附中的NOI国赛成绩中，就有4个学生斩获1个金牌3个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n安徽的重点学校也有科技特长生政策，例如淮南一中、淮南二中、安徽师范附中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "安徽省", "city": "宿州", "region": "华东地区", "script": "安徽是编程成绩比较强的省，例如安徽师范附中、马鞍山二中等，都在NOI中有很出色的成绩。2023年，安徽师范附中的NOI国赛成绩中，就有4个学生斩获1个金牌3个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n安徽的重点学校也有科技特长生政策，例如淮南一中、淮南二中、安徽师范附中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "安徽省", "city": "滁州", "region": "华东地区", "script": "安徽是编程成绩比较强的省，例如安徽师范附中、马鞍山二中等，都在NOI中有很出色的成绩。2023年，安徽师范附中的NOI国赛成绩中，就有4个学生斩获1个金牌3个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n安徽的重点学校也有科技特长生政策，例如淮南一中、淮南二中、安徽师范附中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "安徽省", "city": "六安", "region": "华东地区", "script": "安徽是编程成绩比较强的省，例如安徽师范附中、马鞍山二中等，都在NOI中有很出色的成绩。2023年，安徽师范附中的NOI国赛成绩中，就有4个学生斩获1个金牌3个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n安徽的重点学校也有科技特长生政策，例如淮南一中、淮南二中、安徽师范附中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "安徽省", "city": "宣城", "region": "华东地区", "script": "安徽是编程成绩比较强的省，例如安徽师范附中、马鞍山二中等，都在NOI中有很出色的成绩。2023年，安徽师范附中的NOI国赛成绩中，就有4个学生斩获1个金牌3个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n安徽的重点学校也有科技特长生政策，例如淮南一中、淮南二中、安徽师范附中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "安徽省", "city": "池州", "region": "华东地区", "script": "安徽是编程成绩比较强的省，例如安徽师范附中、马鞍山二中等，都在NOI中有很出色的成绩。2023年，安徽师范附中的NOI国赛成绩中，就有4个学生斩获1个金牌3个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n安徽的重点学校也有科技特长生政策，例如淮南一中、淮南二中、安徽师范附中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "安徽省", "city": "亳州", "region": "华东地区", "script": "安徽是编程成绩比较强的省，例如安徽师范附中、马鞍山二中等，都在NOI中有很出色的成绩。2023年，安徽师范附中的NOI国赛成绩中，就有4个学生斩获1个金牌3个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n安徽的重点学校也有科技特长生政策，例如淮南一中、淮南二中、安徽师范附中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "澳门特别行政区", "city": "澳门", "region": "华南地区", "script": ""}, {"province": "北京市", "city": "北京", "region": "华北地区", "script": "北京的中高考肯定是很卷的，每年都是千军万马过独木桥，科技特长生对孩子来讲就是很值得把握的升学红利。目前国家十分重视并大力发展编程教育，在升学方面风向已逐渐在向科技类靠拢。\n北京有科技特长生政策的高中非常多，例如人大附中、北师大附中、北京四中、北京十五中、中关村中学、汇文中学等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就可以升入这样的重点中学。\n像十一学校、北大附中、北师大附属实验中学、北大附中这些重点中学，在NOI中表现成绩都出色，北大附中2023年拿下2个金牌3个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "重庆市", "city": "重庆", "region": "西南地区", "script": "重庆市是编程成绩很强的地区，例如巴蜀中学、重庆第八中学、重庆鲁能巴蜀中学、育才中学这些学校，都是在信奥赛中表现较好的学校，2023年就拿下2个金牌10个银牌。获得NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n重庆很多重点学校都有科技特长生政策，例如重庆杨家坪中学、重庆广益中学、重庆南坪中学、重庆大学城一中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "福建省", "city": "福州", "region": "华东地区", "script": "福建省很多学校都有科技特长生招生政策，例如福建师范大学附属中学、泉州市第七中学、福州第三中学、长乐第一中学、福州时代中学等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！\n核桃还有一位很优秀的学员李静榕，就是来自福建省厦门双十中学，2023年斩获了NOI金牌，被选入国家集训队，直接保送进清北！"}, {"province": "福建省", "city": "厦门", "region": "华东地区", "script": "福建省很多学校都有科技特长生招生政策，例如福建师范大学附属中学、泉州市第七中学、福州第三中学、长乐第一中学、福州时代中学等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！\n核桃还有一位很优秀的学员李静榕，就是来自福建省厦门双十中学，2023年斩获了NOI金牌，被选入国家集训队，直接保送进清北！"}, {"province": "福建省", "city": "泉州", "region": "华东地区", "script": "福建省很多学校都有科技特长生招生政策，例如福建师范大学附属中学、泉州市第七中学、福州第三中学、长乐第一中学、福州时代中学等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！\n核桃还有一位很优秀的学员李静榕，就是来自福建省厦门双十中学，2023年斩获了NOI金牌，被选入国家集训队，直接保送进清北！"}, {"province": "福建省", "city": "三明", "region": "华东地区", "script": "福建省很多学校都有科技特长生招生政策，例如福建师范大学附属中学、泉州市第七中学、福州第三中学、长乐第一中学、福州时代中学等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！\n核桃还有一位很优秀的学员李静榕，就是来自福建省厦门双十中学，2023年斩获了NOI金牌，被选入国家集训队，直接保送进清北！"}, {"province": "福建省", "city": "南平", "region": "华东地区", "script": "福建省很多学校都有科技特长生招生政策，例如福建师范大学附属中学、泉州市第七中学、福州第三中学、长乐第一中学、福州时代中学等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！\n核桃还有一位很优秀的学员李静榕，就是来自福建省厦门双十中学，2023年斩获了NOI金牌，被选入国家集训队，直接保送进清北！"}, {"province": "福建省", "city": "龙岩", "region": "华东地区", "script": "福建省很多学校都有科技特长生招生政策，例如福建师范大学附属中学、泉州市第七中学、福州第三中学、长乐第一中学、福州时代中学等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！\n核桃还有一位很优秀的学员李静榕，就是来自福建省厦门双十中学，2023年斩获了NOI金牌，被选入国家集训队，直接保送进清北！"}, {"province": "福建省", "city": "漳州", "region": "华东地区", "script": "福建省很多学校都有科技特长生招生政策，例如福建师范大学附属中学、泉州市第七中学、福州第三中学、长乐第一中学、福州时代中学等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！\n核桃还有一位很优秀的学员李静榕，就是来自福建省厦门双十中学，2023年斩获了NOI金牌，被选入国家集训队，直接保送进清北！"}, {"province": "福建省", "city": "宁德", "region": "华东地区", "script": "福建省很多学校都有科技特长生招生政策，例如福建师范大学附属中学、泉州市第七中学、福州第三中学、长乐第一中学、福州时代中学等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！\n核桃还有一位很优秀的学员李静榕，就是来自福建省厦门双十中学，2023年斩获了NOI金牌，被选入国家集训队，直接保送进清北！"}, {"province": "福建省", "city": "莆田", "region": "华东地区", "script": "福建省很多学校都有科技特长生招生政策，例如福建师范大学附属中学、泉州市第七中学、福州第三中学、长乐第一中学、福州时代中学等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！\n核桃还有一位很优秀的学员李静榕，就是来自福建省厦门双十中学，2023年斩获了NOI金牌，被选入国家集训队，直接保送进清北！"}, {"province": "甘肃省", "city": "兰州", "region": "西北地区", "script": "甘肃的学生在参加CSP比赛中有一定优势，因为目前甘肃参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n甘肃很多学校都有科技特长生招生政策，例如兰州一中、兰州二中、兰州九中、兰州二十七中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "甘肃省", "city": "天水", "region": "西北地区", "script": "甘肃的学生在参加CSP比赛中有一定优势，因为目前甘肃参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n甘肃很多学校都有科技特长生招生政策，例如兰州一中、兰州二中、兰州九中、兰州二十七中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "甘肃省", "city": "嘉峪关", "region": "西北地区", "script": "甘肃的学生在参加CSP比赛中有一定优势，因为目前甘肃参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n甘肃很多学校都有科技特长生招生政策，例如兰州一中、兰州二中、兰州九中、兰州二十七中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "甘肃省", "city": "金昌", "region": "西北地区", "script": "甘肃的学生在参加CSP比赛中有一定优势，因为目前甘肃参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n甘肃很多学校都有科技特长生招生政策，例如兰州一中、兰州二中、兰州九中、兰州二十七中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "甘肃省", "city": "白银", "region": "西北地区", "script": "甘肃的学生在参加CSP比赛中有一定优势，因为目前甘肃参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n甘肃很多学校都有科技特长生招生政策，例如兰州一中、兰州二中、兰州九中、兰州二十七中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "甘肃省", "city": "酒泉", "region": "西北地区", "script": "甘肃的学生在参加CSP比赛中有一定优势，因为目前甘肃参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n甘肃很多学校都有科技特长生招生政策，例如兰州一中、兰州二中、兰州九中、兰州二十七中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "甘肃省", "city": "张掖", "region": "西北地区", "script": "甘肃的学生在参加CSP比赛中有一定优势，因为目前甘肃参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n甘肃很多学校都有科技特长生招生政策，例如兰州一中、兰州二中、兰州九中、兰州二十七中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "甘肃省", "city": "武威", "region": "西北地区", "script": "甘肃的学生在参加CSP比赛中有一定优势，因为目前甘肃参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n甘肃很多学校都有科技特长生招生政策，例如兰州一中、兰州二中、兰州九中、兰州二十七中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "甘肃省", "city": "庆阳", "region": "西北地区", "script": "甘肃的学生在参加CSP比赛中有一定优势，因为目前甘肃参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n甘肃很多学校都有科技特长生招生政策，例如兰州一中、兰州二中、兰州九中、兰州二十七中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "甘肃省", "city": "平凉", "region": "西北地区", "script": "甘肃的学生在参加CSP比赛中有一定优势，因为目前甘肃参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n甘肃很多学校都有科技特长生招生政策，例如兰州一中、兰州二中、兰州九中、兰州二十七中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "甘肃省", "city": "定西", "region": "西北地区", "script": "甘肃的学生在参加CSP比赛中有一定优势，因为目前甘肃参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n甘肃很多学校都有科技特长生招生政策，例如兰州一中、兰州二中、兰州九中、兰州二十七中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "甘肃省", "city": "陇南", "region": "西北地区", "script": "甘肃的学生在参加CSP比赛中有一定优势，因为目前甘肃参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n甘肃很多学校都有科技特长生招生政策，例如兰州一中、兰州二中、兰州九中、兰州二十七中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "广东省", "city": "广州", "region": "华南地区", "script": "广东省是编程学习强省，在学编程上是比较卷的地区，像东莞第六高中、东莞中学等学校均有编程招生政策，当地很多学校在CSP中成绩表现很好，每年拿CSP三等奖及以上的孩子很多，还有一些孩子斩获NOI国赛金银牌，金牌并被选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学；\n目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "广东省", "city": "深圳", "region": "华南地区", "script": "广东省是编程学习强省，在学编程上是比较卷的地区，像东莞第六高中、东莞中学等学校均有编程招生政策，当地很多学校在CSP中成绩表现很好，每年拿CSP三等奖及以上的孩子很多，还有一些孩子斩获NOI国赛金银牌，金牌并被选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学；\n目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "广东省", "city": "珠海", "region": "华南地区", "script": "广东省是编程学习强省，在学编程上是比较卷的地区，像东莞第六高中、东莞中学等学校均有编程招生政策，当地很多学校在CSP中成绩表现很好，每年拿CSP三等奖及以上的孩子很多，还有一些孩子斩获NOI国赛金银牌，金牌并被选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学；\n目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "广东省", "city": "汕头", "region": "华南地区", "script": "广东省是编程学习强省，在学编程上是比较卷的地区，像东莞第六高中、东莞中学等学校均有编程招生政策，当地很多学校在CSP中成绩表现很好，每年拿CSP三等奖及以上的孩子很多，还有一些孩子斩获NOI国赛金银牌，金牌并被选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学；\n目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "广东省", "city": "韶关", "region": "华南地区", "script": "广东省是编程学习强省，在学编程上是比较卷的地区，像东莞第六高中、东莞中学等学校均有编程招生政策，当地很多学校在CSP中成绩表现很好，每年拿CSP三等奖及以上的孩子很多，还有一些孩子斩获NOI国赛金银牌，金牌并被选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学；\n目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "广东省", "city": "河源", "region": "华南地区", "script": "广东省是编程学习强省，在学编程上是比较卷的地区，像东莞第六高中、东莞中学等学校均有编程招生政策，当地很多学校在CSP中成绩表现很好，每年拿CSP三等奖及以上的孩子很多，还有一些孩子斩获NOI国赛金银牌，金牌并被选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学；\n目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "广东省", "city": "梅州", "region": "华南地区", "script": "广东省是编程学习强省，在学编程上是比较卷的地区，像东莞第六高中、东莞中学等学校均有编程招生政策，当地很多学校在CSP中成绩表现很好，每年拿CSP三等奖及以上的孩子很多，还有一些孩子斩获NOI国赛金银牌，金牌并被选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学；\n目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "广东省", "city": "汕尾", "region": "华南地区", "script": "广东省是编程学习强省，在学编程上是比较卷的地区，像东莞第六高中、东莞中学等学校均有编程招生政策，当地很多学校在CSP中成绩表现很好，每年拿CSP三等奖及以上的孩子很多，还有一些孩子斩获NOI国赛金银牌，金牌并被选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学；\n目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "广东省", "city": "东莞", "region": "华南地区", "script": "广东省是编程学习强省，在学编程上是比较卷的地区，像东莞第六高中、东莞中学等学校均有编程招生政策，当地很多学校在CSP中成绩表现很好，每年拿CSP三等奖及以上的孩子很多，还有一些孩子斩获NOI国赛金银牌，金牌并被选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学；\n目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "广东省", "city": "中山", "region": "华南地区", "script": "广东省是编程学习强省，在学编程上是比较卷的地区，像东莞第六高中、东莞中学等学校均有编程招生政策，当地很多学校在CSP中成绩表现很好，每年拿CSP三等奖及以上的孩子很多，还有一些孩子斩获NOI国赛金银牌，金牌并被选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学；\n目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "广东省", "city": "江门", "region": "华南地区", "script": "广东省是编程学习强省，在学编程上是比较卷的地区，像东莞第六高中、东莞中学等学校均有编程招生政策，当地很多学校在CSP中成绩表现很好，每年拿CSP三等奖及以上的孩子很多，还有一些孩子斩获NOI国赛金银牌，金牌并被选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学；\n目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "广东省", "city": "佛山", "region": "华南地区", "script": "广东省是编程学习强省，在学编程上是比较卷的地区，像东莞第六高中、东莞中学等学校均有编程招生政策，当地很多学校在CSP中成绩表现很好，每年拿CSP三等奖及以上的孩子很多，还有一些孩子斩获NOI国赛金银牌，金牌并被选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学；\n目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "广东省", "city": "阳江", "region": "华南地区", "script": "广东省是编程学习强省，在学编程上是比较卷的地区，像东莞第六高中、东莞中学等学校均有编程招生政策，当地很多学校在CSP中成绩表现很好，每年拿CSP三等奖及以上的孩子很多，还有一些孩子斩获NOI国赛金银牌，金牌并被选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学；\n目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "广东省", "city": "湛江", "region": "华南地区", "script": "广东省是编程学习强省，在学编程上是比较卷的地区，像东莞第六高中、东莞中学等学校均有编程招生政策，当地很多学校在CSP中成绩表现很好，每年拿CSP三等奖及以上的孩子很多，还有一些孩子斩获NOI国赛金银牌，金牌并被选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学；\n目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "广东省", "city": "茂名", "region": "华南地区", "script": "广东省是编程学习强省，在学编程上是比较卷的地区，像东莞第六高中、东莞中学等学校均有编程招生政策，当地很多学校在CSP中成绩表现很好，每年拿CSP三等奖及以上的孩子很多，还有一些孩子斩获NOI国赛金银牌，金牌并被选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学；\n目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "广东省", "city": "肇庆", "region": "华南地区", "script": "广东省是编程学习强省，在学编程上是比较卷的地区，像东莞第六高中、东莞中学等学校均有编程招生政策，当地很多学校在CSP中成绩表现很好，每年拿CSP三等奖及以上的孩子很多，还有一些孩子斩获NOI国赛金银牌，金牌并被选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学；\n目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "广东省", "city": "清远", "region": "华南地区", "script": "广东省是编程学习强省，在学编程上是比较卷的地区，像东莞第六高中、东莞中学等学校均有编程招生政策，当地很多学校在CSP中成绩表现很好，每年拿CSP三等奖及以上的孩子很多，还有一些孩子斩获NOI国赛金银牌，金牌并被选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学；\n目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "广东省", "city": "潮州", "region": "华南地区", "script": "广东省是编程学习强省，在学编程上是比较卷的地区，像东莞第六高中、东莞中学等学校均有编程招生政策，当地很多学校在CSP中成绩表现很好，每年拿CSP三等奖及以上的孩子很多，还有一些孩子斩获NOI国赛金银牌，金牌并被选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学；\n目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "广东省", "city": "揭阳", "region": "华南地区", "script": "广东省是编程学习强省，在学编程上是比较卷的地区，像东莞第六高中、东莞中学等学校均有编程招生政策，当地很多学校在CSP中成绩表现很好，每年拿CSP三等奖及以上的孩子很多，还有一些孩子斩获NOI国赛金银牌，金牌并被选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学；\n目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "广东省", "city": "云浮", "region": "华南地区", "script": "广东省是编程学习强省，在学编程上是比较卷的地区，像东莞第六高中、东莞中学等学校均有编程招生政策，当地很多学校在CSP中成绩表现很好，每年拿CSP三等奖及以上的孩子很多，还有一些孩子斩获NOI国赛金银牌，金牌并被选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学；\n目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "广西壮族自治区", "city": "南宁", "region": "华南地区", "script": "广西省的学生在参加CSP比赛中有一定优势，因为目前广西省参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n广西的重点学校也有科技特长生政策，例如南宁二中、南宁三中、柳州市一中、柳州市二中、钦州三中、钦州四中、桂平市第一中学、玉林高级中学等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "贵州省", "city": "贵阳", "region": "西南地区", "script": "贵州的学生在参加CSP比赛中有一定优势，因为目前贵州参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n贵州很多学校都有科技特长生招生政策，例如贵阳一中、贵阳九中、贵州省实验中学、贵州开阳三中、遵义一中、遵义四中、毕节一中、铜仁一中、安顺一中、安顺二中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "贵州省", "city": "六盘水", "region": "西南地区", "script": "贵州的学生在参加CSP比赛中有一定优势，因为目前贵州参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n贵州很多学校都有科技特长生招生政策，例如贵阳一中、贵阳九中、贵州省实验中学、贵州开阳三中、遵义一中、遵义四中、毕节一中、铜仁一中、安顺一中、安顺二中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "贵州省", "city": "遵义", "region": "西南地区", "script": "贵州的学生在参加CSP比赛中有一定优势，因为目前贵州参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n贵州很多学校都有科技特长生招生政策，例如贵阳一中、贵阳九中、贵州省实验中学、贵州开阳三中、遵义一中、遵义四中、毕节一中、铜仁一中、安顺一中、安顺二中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "贵州省", "city": "安顺", "region": "西南地区", "script": "贵州的学生在参加CSP比赛中有一定优势，因为目前贵州参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n贵州很多学校都有科技特长生招生政策，例如贵阳一中、贵阳九中、贵州省实验中学、贵州开阳三中、遵义一中、遵义四中、毕节一中、铜仁一中、安顺一中、安顺二中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "贵州省", "city": "毕节", "region": "西南地区", "script": "贵州的学生在参加CSP比赛中有一定优势，因为目前贵州参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n贵州很多学校都有科技特长生招生政策，例如贵阳一中、贵阳九中、贵州省实验中学、贵州开阳三中、遵义一中、遵义四中、毕节一中、铜仁一中、安顺一中、安顺二中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "贵州省", "city": "铜仁", "region": "西南地区", "script": "贵州的学生在参加CSP比赛中有一定优势，因为目前贵州参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n贵州很多学校都有科技特长生招生政策，例如贵阳一中、贵阳九中、贵州省实验中学、贵州开阳三中、遵义一中、遵义四中、毕节一中、铜仁一中、安顺一中、安顺二中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "海南省", "city": "海口", "region": "华南地区", "script": "海南的学生在参加CSP比赛中有一定优势，因为目前海南参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n海南中学、海南省文昌中学、北京师范大学海口附属学校都是海南在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "海南省", "city": "三亚", "region": "华南地区", "script": "海南的学生在参加CSP比赛中有一定优势，因为目前海南参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n海南中学、海南省文昌中学、北京师范大学海口附属学校都是海南在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "海南省", "city": "三沙", "region": "华南地区", "script": "海南的学生在参加CSP比赛中有一定优势，因为目前海南参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n海南中学、海南省文昌中学、北京师范大学海口附属学校都是海南在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "海南省", "city": "儋州", "region": "华南地区", "script": "海南的学生在参加CSP比赛中有一定优势，因为目前海南参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n海南中学、海南省文昌中学、北京师范大学海口附属学校都是海南在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "海南省", "city": "直辖市", "region": "华南地区", "script": "海南的学生在参加CSP比赛中有一定优势，因为目前海南参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n海南中学、海南省文昌中学、北京师范大学海口附属学校都是海南在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "黑龙江省", "city": "哈尔滨", "region": "东北地区", "script": "黑龙江省的学生在参加CSP比赛中有一定优势，因为目前黑龙江省参与的学生较少，竞争小更容易拿奖，学生可以弯道超车，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n虽然目前黑龙江省还没有很明确的官方科技特长生政策，但目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "黑龙江省", "city": "齐齐哈尔", "region": "东北地区", "script": "黑龙江省的学生在参加CSP比赛中有一定优势，因为目前黑龙江省参与的学生较少，竞争小更容易拿奖，学生可以弯道超车，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n虽然目前黑龙江省还没有很明确的官方科技特长生政策，但目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "黑龙江省", "city": "牡丹江", "region": "东北地区", "script": "黑龙江省的学生在参加CSP比赛中有一定优势，因为目前黑龙江省参与的学生较少，竞争小更容易拿奖，学生可以弯道超车，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n虽然目前黑龙江省还没有很明确的官方科技特长生政策，但目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "黑龙江省", "city": "佳木斯", "region": "东北地区", "script": "黑龙江省的学生在参加CSP比赛中有一定优势，因为目前黑龙江省参与的学生较少，竞争小更容易拿奖，学生可以弯道超车，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n虽然目前黑龙江省还没有很明确的官方科技特长生政策，但目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "黑龙江省", "city": "七台河", "region": "东北地区", "script": "黑龙江省的学生在参加CSP比赛中有一定优势，因为目前黑龙江省参与的学生较少，竞争小更容易拿奖，学生可以弯道超车，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n虽然目前黑龙江省还没有很明确的官方科技特长生政策，但目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "黑龙江省", "city": "大庆", "region": "东北地区", "script": "黑龙江省的学生在参加CSP比赛中有一定优势，因为目前黑龙江省参与的学生较少，竞争小更容易拿奖，学生可以弯道超车，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n虽然目前黑龙江省还没有很明确的官方科技特长生政策，但目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "黑龙江省", "city": "黑河", "region": "东北地区", "script": "黑龙江省的学生在参加CSP比赛中有一定优势，因为目前黑龙江省参与的学生较少，竞争小更容易拿奖，学生可以弯道超车，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n虽然目前黑龙江省还没有很明确的官方科技特长生政策，但目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "黑龙江省", "city": "伊春", "region": "东北地区", "script": "黑龙江省的学生在参加CSP比赛中有一定优势，因为目前黑龙江省参与的学生较少，竞争小更容易拿奖，学生可以弯道超车，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n虽然目前黑龙江省还没有很明确的官方科技特长生政策，但目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "黑龙江省", "city": "鹤岗", "region": "东北地区", "script": "黑龙江省的学生在参加CSP比赛中有一定优势，因为目前黑龙江省参与的学生较少，竞争小更容易拿奖，学生可以弯道超车，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n虽然目前黑龙江省还没有很明确的官方科技特长生政策，但目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "黑龙江省", "city": "双鸭山", "region": "东北地区", "script": "黑龙江省的学生在参加CSP比赛中有一定优势，因为目前黑龙江省参与的学生较少，竞争小更容易拿奖，学生可以弯道超车，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n虽然目前黑龙江省还没有很明确的官方科技特长生政策，但目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "黑龙江省", "city": "鸡西", "region": "东北地区", "script": "黑龙江省的学生在参加CSP比赛中有一定优势，因为目前黑龙江省参与的学生较少，竞争小更容易拿奖，学生可以弯道超车，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n虽然目前黑龙江省还没有很明确的官方科技特长生政策，但目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "黑龙江省", "city": "绥化", "region": "东北地区", "script": "黑龙江省的学生在参加CSP比赛中有一定优势，因为目前黑龙江省参与的学生较少，竞争小更容易拿奖，学生可以弯道超车，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n虽然目前黑龙江省还没有很明确的官方科技特长生政策，但目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "河北省", "city": "石家庄", "region": "华北地区", "script": "河北省的很多学校有科技特长生招生政策，例如邯郸二中、衡水中学、保定三中、石家庄二中、河北正定中学、石家庄一中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学。\n河北省的学生在参加CSP时有一定优势，因为目前河北省参与的学生较少，有信息差优势，竞争小更容易拿奖。石家庄二中、衡水一中都是河北省在信奥赛中表现较好的学校。学生在信奥赛中拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学！"}, {"province": "河北省", "city": "秦皇岛", "region": "华北地区", "script": "河北省的很多学校有科技特长生招生政策，例如邯郸二中、衡水中学、保定三中、石家庄二中、河北正定中学、石家庄一中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学。\n河北省的学生在参加CSP时有一定优势，因为目前河北省参与的学生较少，有信息差优势，竞争小更容易拿奖。石家庄二中、衡水一中都是河北省在信奥赛中表现较好的学校。学生在信奥赛中拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学！"}, {"province": "河北省", "city": "唐山", "region": "华北地区", "script": "河北省的很多学校有科技特长生招生政策，例如邯郸二中、衡水中学、保定三中、石家庄二中、河北正定中学、石家庄一中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学。\n河北省的学生在参加CSP时有一定优势，因为目前河北省参与的学生较少，有信息差优势，竞争小更容易拿奖。石家庄二中、衡水一中都是河北省在信奥赛中表现较好的学校。学生在信奥赛中拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学！"}, {"province": "河北省", "city": "保定", "region": "华北地区", "script": "河北省的很多学校有科技特长生招生政策，例如邯郸二中、衡水中学、保定三中、石家庄二中、河北正定中学、石家庄一中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学。\n河北省的学生在参加CSP时有一定优势，因为目前河北省参与的学生较少，有信息差优势，竞争小更容易拿奖。石家庄二中、衡水一中都是河北省在信奥赛中表现较好的学校。学生在信奥赛中拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学！"}, {"province": "河北省", "city": "张家口", "region": "华北地区", "script": "河北省的很多学校有科技特长生招生政策，例如邯郸二中、衡水中学、保定三中、石家庄二中、河北正定中学、石家庄一中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学。\n河北省的学生在参加CSP时有一定优势，因为目前河北省参与的学生较少，有信息差优势，竞争小更容易拿奖。石家庄二中、衡水一中都是河北省在信奥赛中表现较好的学校。学生在信奥赛中拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学！"}, {"province": "河北省", "city": "廊坊", "region": "华北地区", "script": "河北省的很多学校有科技特长生招生政策，例如邯郸二中、衡水中学、保定三中、石家庄二中、河北正定中学、石家庄一中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学。\n河北省的学生在参加CSP时有一定优势，因为目前河北省参与的学生较少，有信息差优势，竞争小更容易拿奖。石家庄二中、衡水一中都是河北省在信奥赛中表现较好的学校。学生在信奥赛中拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学！"}, {"province": "河北省", "city": "沧州", "region": "华北地区", "script": "河北省的很多学校有科技特长生招生政策，例如邯郸二中、衡水中学、保定三中、石家庄二中、河北正定中学、石家庄一中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学。\n河北省的学生在参加CSP时有一定优势，因为目前河北省参与的学生较少，有信息差优势，竞争小更容易拿奖。石家庄二中、衡水一中都是河北省在信奥赛中表现较好的学校。学生在信奥赛中拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学！"}, {"province": "河北省", "city": "衡水", "region": "华北地区", "script": "河北省的很多学校有科技特长生招生政策，例如邯郸二中、衡水中学、保定三中、石家庄二中、河北正定中学、石家庄一中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学。\n河北省的学生在参加CSP时有一定优势，因为目前河北省参与的学生较少，有信息差优势，竞争小更容易拿奖。石家庄二中、衡水一中都是河北省在信奥赛中表现较好的学校。学生在信奥赛中拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学！"}, {"province": "河北省", "city": "承德", "region": "华北地区", "script": "河北省的很多学校有科技特长生招生政策，例如邯郸二中、衡水中学、保定三中、石家庄二中、河北正定中学、石家庄一中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学。\n河北省的学生在参加CSP时有一定优势，因为目前河北省参与的学生较少，有信息差优势，竞争小更容易拿奖。石家庄二中、衡水一中都是河北省在信奥赛中表现较好的学校。学生在信奥赛中拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学！"}, {"province": "河北省", "city": "邢台", "region": "华北地区", "script": "河北省的很多学校有科技特长生招生政策，例如邯郸二中、衡水中学、保定三中、石家庄二中、河北正定中学、石家庄一中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学。\n河北省的学生在参加CSP时有一定优势，因为目前河北省参与的学生较少，有信息差优势，竞争小更容易拿奖。石家庄二中、衡水一中都是河北省在信奥赛中表现较好的学校。学生在信奥赛中拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学！"}, {"province": "河北省", "city": "邯郸", "region": "华北地区", "script": "河北省的很多学校有科技特长生招生政策，例如邯郸二中、衡水中学、保定三中、石家庄二中、河北正定中学、石家庄一中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学。\n河北省的学生在参加CSP时有一定优势，因为目前河北省参与的学生较少，有信息差优势，竞争小更容易拿奖。石家庄二中、衡水一中都是河北省在信奥赛中表现较好的学校。学生在信奥赛中拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学！"}, {"province": "河南省", "city": "郑州", "region": "华中地区", "script": "河南是高考大省，每年都是千军万马过独木桥，高考竞争这么激烈，科技特长生对孩子来讲就是很值得把握的升学红利，能够让孩子弯道超车！\n河南省的学生在参加CSP时有一定优势，因为目前河南省参与的学生较少，有信息差优势，竞争小更容易拿奖。焦作市第一中学、郑州市第一中学、郑州外国语学校都是河南省在信奥赛中表现较好的学校。学生在信奥赛中拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学！"}, {"province": "河南省", "city": "开封", "region": "华中地区", "script": "河南是高考大省，每年都是千军万马过独木桥，高考竞争这么激烈，科技特长生对孩子来讲就是很值得把握的升学红利，能够让孩子弯道超车！\n河南省的学生在参加CSP时有一定优势，因为目前河南省参与的学生较少，有信息差优势，竞争小更容易拿奖。焦作市第一中学、郑州市第一中学、郑州外国语学校都是河南省在信奥赛中表现较好的学校。学生在信奥赛中拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学！"}, {"province": "河南省", "city": "洛阳", "region": "华中地区", "script": "河南是高考大省，每年都是千军万马过独木桥，高考竞争这么激烈，科技特长生对孩子来讲就是很值得把握的升学红利，能够让孩子弯道超车！\n河南省的学生在参加CSP时有一定优势，因为目前河南省参与的学生较少，有信息差优势，竞争小更容易拿奖。焦作市第一中学、郑州市第一中学、郑州外国语学校都是河南省在信奥赛中表现较好的学校。学生在信奥赛中拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学！"}, {"province": "河南省", "city": "平顶山", "region": "华中地区", "script": "河南是高考大省，每年都是千军万马过独木桥，高考竞争这么激烈，科技特长生对孩子来讲就是很值得把握的升学红利，能够让孩子弯道超车！\n河南省的学生在参加CSP时有一定优势，因为目前河南省参与的学生较少，有信息差优势，竞争小更容易拿奖。焦作市第一中学、郑州市第一中学、郑州外国语学校都是河南省在信奥赛中表现较好的学校。学生在信奥赛中拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学！"}, {"province": "河南省", "city": "安阳", "region": "华中地区", "script": "河南是高考大省，每年都是千军万马过独木桥，高考竞争这么激烈，科技特长生对孩子来讲就是很值得把握的升学红利，能够让孩子弯道超车！\n河南省的学生在参加CSP时有一定优势，因为目前河南省参与的学生较少，有信息差优势，竞争小更容易拿奖。焦作市第一中学、郑州市第一中学、郑州外国语学校都是河南省在信奥赛中表现较好的学校。学生在信奥赛中拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学！"}, {"province": "河南省", "city": "鹤壁", "region": "华中地区", "script": "河南是高考大省，每年都是千军万马过独木桥，高考竞争这么激烈，科技特长生对孩子来讲就是很值得把握的升学红利，能够让孩子弯道超车！\n河南省的学生在参加CSP时有一定优势，因为目前河南省参与的学生较少，有信息差优势，竞争小更容易拿奖。焦作市第一中学、郑州市第一中学、郑州外国语学校都是河南省在信奥赛中表现较好的学校。学生在信奥赛中拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学！"}, {"province": "河南省", "city": "新乡", "region": "华中地区", "script": "河南是高考大省，每年都是千军万马过独木桥，高考竞争这么激烈，科技特长生对孩子来讲就是很值得把握的升学红利，能够让孩子弯道超车！\n河南省的学生在参加CSP时有一定优势，因为目前河南省参与的学生较少，有信息差优势，竞争小更容易拿奖。焦作市第一中学、郑州市第一中学、郑州外国语学校都是河南省在信奥赛中表现较好的学校。学生在信奥赛中拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学！"}, {"province": "河南省", "city": "焦作", "region": "华中地区", "script": "河南是高考大省，每年都是千军万马过独木桥，高考竞争这么激烈，科技特长生对孩子来讲就是很值得把握的升学红利，能够让孩子弯道超车！\n河南省的学生在参加CSP时有一定优势，因为目前河南省参与的学生较少，有信息差优势，竞争小更容易拿奖。焦作市第一中学、郑州市第一中学、郑州外国语学校都是河南省在信奥赛中表现较好的学校。学生在信奥赛中拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学！"}, {"province": "河南省", "city": "濮阳", "region": "华中地区", "script": "河南是高考大省，每年都是千军万马过独木桥，高考竞争这么激烈，科技特长生对孩子来讲就是很值得把握的升学红利，能够让孩子弯道超车！\n河南省的学生在参加CSP时有一定优势，因为目前河南省参与的学生较少，有信息差优势，竞争小更容易拿奖。焦作市第一中学、郑州市第一中学、郑州外国语学校都是河南省在信奥赛中表现较好的学校。学生在信奥赛中拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学！"}, {"province": "河南省", "city": "许昌", "region": "华中地区", "script": "河南是高考大省，每年都是千军万马过独木桥，高考竞争这么激烈，科技特长生对孩子来讲就是很值得把握的升学红利，能够让孩子弯道超车！\n河南省的学生在参加CSP时有一定优势，因为目前河南省参与的学生较少，有信息差优势，竞争小更容易拿奖。焦作市第一中学、郑州市第一中学、郑州外国语学校都是河南省在信奥赛中表现较好的学校。学生在信奥赛中拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学！"}, {"province": "河南省", "city": "漯河", "region": "华中地区", "script": "河南是高考大省，每年都是千军万马过独木桥，高考竞争这么激烈，科技特长生对孩子来讲就是很值得把握的升学红利，能够让孩子弯道超车！\n河南省的学生在参加CSP时有一定优势，因为目前河南省参与的学生较少，有信息差优势，竞争小更容易拿奖。焦作市第一中学、郑州市第一中学、郑州外国语学校都是河南省在信奥赛中表现较好的学校。学生在信奥赛中拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学！"}, {"province": "河南省", "city": "三门峡", "region": "华中地区", "script": "河南是高考大省，每年都是千军万马过独木桥，高考竞争这么激烈，科技特长生对孩子来讲就是很值得把握的升学红利，能够让孩子弯道超车！\n河南省的学生在参加CSP时有一定优势，因为目前河南省参与的学生较少，有信息差优势，竞争小更容易拿奖。焦作市第一中学、郑州市第一中学、郑州外国语学校都是河南省在信奥赛中表现较好的学校。学生在信奥赛中拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学！"}, {"province": "河南省", "city": "南阳", "region": "华中地区", "script": "河南是高考大省，每年都是千军万马过独木桥，高考竞争这么激烈，科技特长生对孩子来讲就是很值得把握的升学红利，能够让孩子弯道超车！\n河南省的学生在参加CSP时有一定优势，因为目前河南省参与的学生较少，有信息差优势，竞争小更容易拿奖。焦作市第一中学、郑州市第一中学、郑州外国语学校都是河南省在信奥赛中表现较好的学校。学生在信奥赛中拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学！"}, {"province": "河南省", "city": "商丘", "region": "华中地区", "script": "河南是高考大省，每年都是千军万马过独木桥，高考竞争这么激烈，科技特长生对孩子来讲就是很值得把握的升学红利，能够让孩子弯道超车！\n河南省的学生在参加CSP时有一定优势，因为目前河南省参与的学生较少，有信息差优势，竞争小更容易拿奖。焦作市第一中学、郑州市第一中学、郑州外国语学校都是河南省在信奥赛中表现较好的学校。学生在信奥赛中拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学！"}, {"province": "河南省", "city": "信阳", "region": "华中地区", "script": "河南是高考大省，每年都是千军万马过独木桥，高考竞争这么激烈，科技特长生对孩子来讲就是很值得把握的升学红利，能够让孩子弯道超车！\n河南省的学生在参加CSP时有一定优势，因为目前河南省参与的学生较少，有信息差优势，竞争小更容易拿奖。焦作市第一中学、郑州市第一中学、郑州外国语学校都是河南省在信奥赛中表现较好的学校。学生在信奥赛中拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学！"}, {"province": "河南省", "city": "周口", "region": "华中地区", "script": "河南是高考大省，每年都是千军万马过独木桥，高考竞争这么激烈，科技特长生对孩子来讲就是很值得把握的升学红利，能够让孩子弯道超车！\n河南省的学生在参加CSP时有一定优势，因为目前河南省参与的学生较少，有信息差优势，竞争小更容易拿奖。焦作市第一中学、郑州市第一中学、郑州外国语学校都是河南省在信奥赛中表现较好的学校。学生在信奥赛中拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学！"}, {"province": "河南省", "city": "驻马店", "region": "华中地区", "script": "河南是高考大省，每年都是千军万马过独木桥，高考竞争这么激烈，科技特长生对孩子来讲就是很值得把握的升学红利，能够让孩子弯道超车！\n河南省的学生在参加CSP时有一定优势，因为目前河南省参与的学生较少，有信息差优势，竞争小更容易拿奖。焦作市第一中学、郑州市第一中学、郑州外国语学校都是河南省在信奥赛中表现较好的学校。学生在信奥赛中拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学！"}, {"province": "湖北省", "city": "武汉", "region": "华中地区", "script": "湖北是非常重视编程教育的省份，以2023年为例，武汉市江汉区在创建国家“智慧教育示范区”，像武汉市第十九中学、武汉市第十二初级中学、武汉市新华下路中学等，都开始探索利用“云、边、端”和大数据、物联网、人工智能等新技术构建的智慧课堂教学新模式。\n湖北省有科技特长生招生政策的学校也很多，例如宜昌市科技高中、十堰市一中、东风高级中学、郧阳中学、襄阳四中、襄阳五中等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！\n华中师范大学第一附属中学、武汉外国语学校都是湖北省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "湖北省", "city": "十堰", "region": "华中地区", "script": "湖北是非常重视编程教育的省份，以2023年为例，武汉市江汉区在创建国家“智慧教育示范区”，像武汉市第十九中学、武汉市第十二初级中学、武汉市新华下路中学等，都开始探索利用“云、边、端”和大数据、物联网、人工智能等新技术构建的智慧课堂教学新模式。\n湖北省有科技特长生招生政策的学校也很多，例如宜昌市科技高中、十堰市一中、东风高级中学、郧阳中学、襄阳四中、襄阳五中等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！\n华中师范大学第一附属中学、武汉外国语学校都是湖北省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "湖北省", "city": "襄阳", "region": "华中地区", "script": "湖北是非常重视编程教育的省份，以2023年为例，武汉市江汉区在创建国家“智慧教育示范区”，像武汉市第十九中学、武汉市第十二初级中学、武汉市新华下路中学等，都开始探索利用“云、边、端”和大数据、物联网、人工智能等新技术构建的智慧课堂教学新模式。\n湖北省有科技特长生招生政策的学校也很多，例如宜昌市科技高中、十堰市一中、东风高级中学、郧阳中学、襄阳四中、襄阳五中等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！\n华中师范大学第一附属中学、武汉外国语学校都是湖北省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "湖北省", "city": "随州", "region": "华中地区", "script": "湖北是非常重视编程教育的省份，以2023年为例，武汉市江汉区在创建国家“智慧教育示范区”，像武汉市第十九中学、武汉市第十二初级中学、武汉市新华下路中学等，都开始探索利用“云、边、端”和大数据、物联网、人工智能等新技术构建的智慧课堂教学新模式。\n湖北省有科技特长生招生政策的学校也很多，例如宜昌市科技高中、十堰市一中、东风高级中学、郧阳中学、襄阳四中、襄阳五中等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！\n华中师范大学第一附属中学、武汉外国语学校都是湖北省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "湖北省", "city": "荆门", "region": "华中地区", "script": "湖北是非常重视编程教育的省份，以2023年为例，武汉市江汉区在创建国家“智慧教育示范区”，像武汉市第十九中学、武汉市第十二初级中学、武汉市新华下路中学等，都开始探索利用“云、边、端”和大数据、物联网、人工智能等新技术构建的智慧课堂教学新模式。\n湖北省有科技特长生招生政策的学校也很多，例如宜昌市科技高中、十堰市一中、东风高级中学、郧阳中学、襄阳四中、襄阳五中等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！\n华中师范大学第一附属中学、武汉外国语学校都是湖北省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "湖北省", "city": "孝感", "region": "华中地区", "script": "湖北是非常重视编程教育的省份，以2023年为例，武汉市江汉区在创建国家“智慧教育示范区”，像武汉市第十九中学、武汉市第十二初级中学、武汉市新华下路中学等，都开始探索利用“云、边、端”和大数据、物联网、人工智能等新技术构建的智慧课堂教学新模式。\n湖北省有科技特长生招生政策的学校也很多，例如宜昌市科技高中、十堰市一中、东风高级中学、郧阳中学、襄阳四中、襄阳五中等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！\n华中师范大学第一附属中学、武汉外国语学校都是湖北省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "湖北省", "city": "宜昌", "region": "华中地区", "script": "湖北是非常重视编程教育的省份，以2023年为例，武汉市江汉区在创建国家“智慧教育示范区”，像武汉市第十九中学、武汉市第十二初级中学、武汉市新华下路中学等，都开始探索利用“云、边、端”和大数据、物联网、人工智能等新技术构建的智慧课堂教学新模式。\n湖北省有科技特长生招生政策的学校也很多，例如宜昌市科技高中、十堰市一中、东风高级中学、郧阳中学、襄阳四中、襄阳五中等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！\n华中师范大学第一附属中学、武汉外国语学校都是湖北省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "湖北省", "city": "黄冈", "region": "华中地区", "script": "湖北是非常重视编程教育的省份，以2023年为例，武汉市江汉区在创建国家“智慧教育示范区”，像武汉市第十九中学、武汉市第十二初级中学、武汉市新华下路中学等，都开始探索利用“云、边、端”和大数据、物联网、人工智能等新技术构建的智慧课堂教学新模式。\n湖北省有科技特长生招生政策的学校也很多，例如宜昌市科技高中、十堰市一中、东风高级中学、郧阳中学、襄阳四中、襄阳五中等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！\n华中师范大学第一附属中学、武汉外国语学校都是湖北省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "湖北省", "city": "鄂州", "region": "华中地区", "script": "湖北是非常重视编程教育的省份，以2023年为例，武汉市江汉区在创建国家“智慧教育示范区”，像武汉市第十九中学、武汉市第十二初级中学、武汉市新华下路中学等，都开始探索利用“云、边、端”和大数据、物联网、人工智能等新技术构建的智慧课堂教学新模式。\n湖北省有科技特长生招生政策的学校也很多，例如宜昌市科技高中、十堰市一中、东风高级中学、郧阳中学、襄阳四中、襄阳五中等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！\n华中师范大学第一附属中学、武汉外国语学校都是湖北省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "湖北省", "city": "黄石", "region": "华中地区", "script": "湖北是非常重视编程教育的省份，以2023年为例，武汉市江汉区在创建国家“智慧教育示范区”，像武汉市第十九中学、武汉市第十二初级中学、武汉市新华下路中学等，都开始探索利用“云、边、端”和大数据、物联网、人工智能等新技术构建的智慧课堂教学新模式。\n湖北省有科技特长生招生政策的学校也很多，例如宜昌市科技高中、十堰市一中、东风高级中学、郧阳中学、襄阳四中、襄阳五中等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！\n华中师范大学第一附属中学、武汉外国语学校都是湖北省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "湖北省", "city": "咸宁", "region": "华中地区", "script": "湖北是非常重视编程教育的省份，以2023年为例，武汉市江汉区在创建国家“智慧教育示范区”，像武汉市第十九中学、武汉市第十二初级中学、武汉市新华下路中学等，都开始探索利用“云、边、端”和大数据、物联网、人工智能等新技术构建的智慧课堂教学新模式。\n湖北省有科技特长生招生政策的学校也很多，例如宜昌市科技高中、十堰市一中、东风高级中学、郧阳中学、襄阳四中、襄阳五中等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！\n华中师范大学第一附属中学、武汉外国语学校都是湖北省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "湖北省", "city": "荆州", "region": "华中地区", "script": "湖北是非常重视编程教育的省份，以2023年为例，武汉市江汉区在创建国家“智慧教育示范区”，像武汉市第十九中学、武汉市第十二初级中学、武汉市新华下路中学等，都开始探索利用“云、边、端”和大数据、物联网、人工智能等新技术构建的智慧课堂教学新模式。\n湖北省有科技特长生招生政策的学校也很多，例如宜昌市科技高中、十堰市一中、东风高级中学、郧阳中学、襄阳四中、襄阳五中等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！\n华中师范大学第一附属中学、武汉外国语学校都是湖北省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "湖北省", "city": "直辖市", "region": "华中地区", "script": "湖北是非常重视编程教育的省份，以2023年为例，武汉市江汉区在创建国家“智慧教育示范区”，像武汉市第十九中学、武汉市第十二初级中学、武汉市新华下路中学等，都开始探索利用“云、边、端”和大数据、物联网、人工智能等新技术构建的智慧课堂教学新模式。\n湖北省有科技特长生招生政策的学校也很多，例如宜昌市科技高中、十堰市一中、东风高级中学、郧阳中学、襄阳四中、襄阳五中等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！\n华中师范大学第一附属中学、武汉外国语学校都是湖北省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "湖南省", "city": "长沙", "region": "华中地区", "script": "湖南是很重视编程教育的省份，例如长沙雅礼中学、长沙长郡中学、长沙一中等，都在NOI中有很出色的成绩。以上3个学校在2023年NOI国赛中，斩获3个金牌9个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n湖南省还有自己的科创班，例如岳阳中学从2023年起开始面向市区初中毕业生招收科技创新人才培养实验班，重点培养科技人才。\n湖南省有科技特长生招生政策的学校也很多，例如长郡中学、雅礼中学、长沙一中、雷锋学校、湖南师范附中、周南中学等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！"}, {"province": "湖南省", "city": "株洲", "region": "华中地区", "script": "湖南是很重视编程教育的省份，例如长沙雅礼中学、长沙长郡中学、长沙一中等，都在NOI中有很出色的成绩。以上3个学校在2023年NOI国赛中，斩获3个金牌9个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n湖南省还有自己的科创班，例如岳阳中学从2023年起开始面向市区初中毕业生招收科技创新人才培养实验班，重点培养科技人才。\n湖南省有科技特长生招生政策的学校也很多，例如长郡中学、雅礼中学、长沙一中、雷锋学校、湖南师范附中、周南中学等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！"}, {"province": "湖南省", "city": "湘潭", "region": "华中地区", "script": "湖南是很重视编程教育的省份，例如长沙雅礼中学、长沙长郡中学、长沙一中等，都在NOI中有很出色的成绩。以上3个学校在2023年NOI国赛中，斩获3个金牌9个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n湖南省还有自己的科创班，例如岳阳中学从2023年起开始面向市区初中毕业生招收科技创新人才培养实验班，重点培养科技人才。\n湖南省有科技特长生招生政策的学校也很多，例如长郡中学、雅礼中学、长沙一中、雷锋学校、湖南师范附中、周南中学等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！"}, {"province": "湖南省", "city": "衡阳", "region": "华中地区", "script": "湖南是很重视编程教育的省份，例如长沙雅礼中学、长沙长郡中学、长沙一中等，都在NOI中有很出色的成绩。以上3个学校在2023年NOI国赛中，斩获3个金牌9个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n湖南省还有自己的科创班，例如岳阳中学从2023年起开始面向市区初中毕业生招收科技创新人才培养实验班，重点培养科技人才。\n湖南省有科技特长生招生政策的学校也很多，例如长郡中学、雅礼中学、长沙一中、雷锋学校、湖南师范附中、周南中学等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！"}, {"province": "湖南省", "city": "邵阳", "region": "华中地区", "script": "湖南是很重视编程教育的省份，例如长沙雅礼中学、长沙长郡中学、长沙一中等，都在NOI中有很出色的成绩。以上3个学校在2023年NOI国赛中，斩获3个金牌9个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n湖南省还有自己的科创班，例如岳阳中学从2023年起开始面向市区初中毕业生招收科技创新人才培养实验班，重点培养科技人才。\n湖南省有科技特长生招生政策的学校也很多，例如长郡中学、雅礼中学、长沙一中、雷锋学校、湖南师范附中、周南中学等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！"}, {"province": "湖南省", "city": "岳阳", "region": "华中地区", "script": "湖南是很重视编程教育的省份，例如长沙雅礼中学、长沙长郡中学、长沙一中等，都在NOI中有很出色的成绩。以上3个学校在2023年NOI国赛中，斩获3个金牌9个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n湖南省还有自己的科创班，例如岳阳中学从2023年起开始面向市区初中毕业生招收科技创新人才培养实验班，重点培养科技人才。\n湖南省有科技特长生招生政策的学校也很多，例如长郡中学、雅礼中学、长沙一中、雷锋学校、湖南师范附中、周南中学等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！"}, {"province": "湖南省", "city": "常德", "region": "华中地区", "script": "湖南是很重视编程教育的省份，例如长沙雅礼中学、长沙长郡中学、长沙一中等，都在NOI中有很出色的成绩。以上3个学校在2023年NOI国赛中，斩获3个金牌9个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n湖南省还有自己的科创班，例如岳阳中学从2023年起开始面向市区初中毕业生招收科技创新人才培养实验班，重点培养科技人才。\n湖南省有科技特长生招生政策的学校也很多，例如长郡中学、雅礼中学、长沙一中、雷锋学校、湖南师范附中、周南中学等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！"}, {"province": "湖南省", "city": "张家界", "region": "华中地区", "script": "湖南是很重视编程教育的省份，例如长沙雅礼中学、长沙长郡中学、长沙一中等，都在NOI中有很出色的成绩。以上3个学校在2023年NOI国赛中，斩获3个金牌9个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n湖南省还有自己的科创班，例如岳阳中学从2023年起开始面向市区初中毕业生招收科技创新人才培养实验班，重点培养科技人才。\n湖南省有科技特长生招生政策的学校也很多，例如长郡中学、雅礼中学、长沙一中、雷锋学校、湖南师范附中、周南中学等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！"}, {"province": "湖南省", "city": "益阳", "region": "华中地区", "script": "湖南是很重视编程教育的省份，例如长沙雅礼中学、长沙长郡中学、长沙一中等，都在NOI中有很出色的成绩。以上3个学校在2023年NOI国赛中，斩获3个金牌9个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n湖南省还有自己的科创班，例如岳阳中学从2023年起开始面向市区初中毕业生招收科技创新人才培养实验班，重点培养科技人才。\n湖南省有科技特长生招生政策的学校也很多，例如长郡中学、雅礼中学、长沙一中、雷锋学校、湖南师范附中、周南中学等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！"}, {"province": "湖南省", "city": "郴州", "region": "华中地区", "script": "湖南是很重视编程教育的省份，例如长沙雅礼中学、长沙长郡中学、长沙一中等，都在NOI中有很出色的成绩。以上3个学校在2023年NOI国赛中，斩获3个金牌9个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n湖南省还有自己的科创班，例如岳阳中学从2023年起开始面向市区初中毕业生招收科技创新人才培养实验班，重点培养科技人才。\n湖南省有科技特长生招生政策的学校也很多，例如长郡中学、雅礼中学、长沙一中、雷锋学校、湖南师范附中、周南中学等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！"}, {"province": "湖南省", "city": "永州", "region": "华中地区", "script": "湖南是很重视编程教育的省份，例如长沙雅礼中学、长沙长郡中学、长沙一中等，都在NOI中有很出色的成绩。以上3个学校在2023年NOI国赛中，斩获3个金牌9个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n湖南省还有自己的科创班，例如岳阳中学从2023年起开始面向市区初中毕业生招收科技创新人才培养实验班，重点培养科技人才。\n湖南省有科技特长生招生政策的学校也很多，例如长郡中学、雅礼中学、长沙一中、雷锋学校、湖南师范附中、周南中学等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！"}, {"province": "湖南省", "city": "怀化", "region": "华中地区", "script": "湖南是很重视编程教育的省份，例如长沙雅礼中学、长沙长郡中学、长沙一中等，都在NOI中有很出色的成绩。以上3个学校在2023年NOI国赛中，斩获3个金牌9个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n湖南省还有自己的科创班，例如岳阳中学从2023年起开始面向市区初中毕业生招收科技创新人才培养实验班，重点培养科技人才。\n湖南省有科技特长生招生政策的学校也很多，例如长郡中学、雅礼中学、长沙一中、雷锋学校、湖南师范附中、周南中学等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！"}, {"province": "湖南省", "city": "娄底", "region": "华中地区", "script": "湖南是很重视编程教育的省份，例如长沙雅礼中学、长沙长郡中学、长沙一中等，都在NOI中有很出色的成绩。以上3个学校在2023年NOI国赛中，斩获3个金牌9个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n湖南省还有自己的科创班，例如岳阳中学从2023年起开始面向市区初中毕业生招收科技创新人才培养实验班，重点培养科技人才。\n湖南省有科技特长生招生政策的学校也很多，例如长郡中学、雅礼中学、长沙一中、雷锋学校、湖南师范附中、周南中学等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！"}, {"province": "江苏省", "city": "南京", "region": "华东地区", "script": "江苏省是编程成绩很厉害的省份，例如南京外国语学校，江苏省常州高级中学这样的学校，都是在NOI信奥赛国赛获奖排名前10的学校。以2023年为例，南京外国语学校在NOI决赛中能拿到10个奖牌，其中6个孩子是金牌，并且被选进国家集训队，直接保送清北。\n孩子在江苏省要走科技特长生路线的话，可选择的学校很多，例如南京外国语学校金陵中学、江苏省淮阴中学、江苏省天一中学、江苏省扬州中学等等都有招生名额。"}, {"province": "江苏省", "city": "无锡", "region": "华东地区", "script": "江苏省是编程成绩很厉害的省份，例如南京外国语学校，江苏省常州高级中学这样的学校，都是在NOI信奥赛国赛获奖排名前10的学校。以2023年为例，南京外国语学校在NOI决赛中能拿到10个奖牌，其中6个孩子是金牌，并且被选进国家集训队，直接保送清北。\n孩子在江苏省要走科技特长生路线的话，可选择的学校很多，例如南京外国语学校金陵中学、江苏省淮阴中学、江苏省天一中学、江苏省扬州中学等等都有招生名额。"}, {"province": "江苏省", "city": "苏州", "region": "华东地区", "script": "江苏省是编程成绩很厉害的省份，例如南京外国语学校，江苏省常州高级中学这样的学校，都是在NOI信奥赛国赛获奖排名前10的学校。以2023年为例，南京外国语学校在NOI决赛中能拿到10个奖牌，其中6个孩子是金牌，并且被选进国家集训队，直接保送清北。\n孩子在江苏省要走科技特长生路线的话，可选择的学校很多，例如南京外国语学校金陵中学、江苏省淮阴中学、江苏省天一中学、江苏省扬州中学等等都有招生名额。"}, {"province": "江苏省", "city": "南通", "region": "华东地区", "script": "江苏省是编程成绩很厉害的省份，例如南京外国语学校，江苏省常州高级中学这样的学校，都是在NOI信奥赛国赛获奖排名前10的学校。以2023年为例，南京外国语学校在NOI决赛中能拿到10个奖牌，其中6个孩子是金牌，并且被选进国家集训队，直接保送清北。\n孩子在江苏省要走科技特长生路线的话，可选择的学校很多，例如南京外国语学校金陵中学、江苏省淮阴中学、江苏省天一中学、江苏省扬州中学等等都有招生名额。"}, {"province": "江苏省", "city": "泰州", "region": "华东地区", "script": "江苏省是编程成绩很厉害的省份，例如南京外国语学校，江苏省常州高级中学这样的学校，都是在NOI信奥赛国赛获奖排名前10的学校。以2023年为例，南京外国语学校在NOI决赛中能拿到10个奖牌，其中6个孩子是金牌，并且被选进国家集训队，直接保送清北。\n孩子在江苏省要走科技特长生路线的话，可选择的学校很多，例如南京外国语学校金陵中学、江苏省淮阴中学、江苏省天一中学、江苏省扬州中学等等都有招生名额。"}, {"province": "江苏省", "city": "徐州", "region": "华东地区", "script": "江苏省是编程成绩很厉害的省份，例如南京外国语学校，江苏省常州高级中学这样的学校，都是在NOI信奥赛国赛获奖排名前10的学校。以2023年为例，南京外国语学校在NOI决赛中能拿到10个奖牌，其中6个孩子是金牌，并且被选进国家集训队，直接保送清北。\n孩子在江苏省要走科技特长生路线的话，可选择的学校很多，例如南京外国语学校金陵中学、江苏省淮阴中学、江苏省天一中学、江苏省扬州中学等等都有招生名额。"}, {"province": "江苏省", "city": "淮安", "region": "华东地区", "script": "江苏省是编程成绩很厉害的省份，例如南京外国语学校，江苏省常州高级中学这样的学校，都是在NOI信奥赛国赛获奖排名前10的学校。以2023年为例，南京外国语学校在NOI决赛中能拿到10个奖牌，其中6个孩子是金牌，并且被选进国家集训队，直接保送清北。\n孩子在江苏省要走科技特长生路线的话，可选择的学校很多，例如南京外国语学校金陵中学、江苏省淮阴中学、江苏省天一中学、江苏省扬州中学等等都有招生名额。"}, {"province": "江苏省", "city": "宿迁", "region": "华东地区", "script": "江苏省是编程成绩很厉害的省份，例如南京外国语学校，江苏省常州高级中学这样的学校，都是在NOI信奥赛国赛获奖排名前10的学校。以2023年为例，南京外国语学校在NOI决赛中能拿到10个奖牌，其中6个孩子是金牌，并且被选进国家集训队，直接保送清北。\n孩子在江苏省要走科技特长生路线的话，可选择的学校很多，例如南京外国语学校金陵中学、江苏省淮阴中学、江苏省天一中学、江苏省扬州中学等等都有招生名额。"}, {"province": "江苏省", "city": "连云港", "region": "华东地区", "script": "江苏省是编程成绩很厉害的省份，例如南京外国语学校，江苏省常州高级中学这样的学校，都是在NOI信奥赛国赛获奖排名前10的学校。以2023年为例，南京外国语学校在NOI决赛中能拿到10个奖牌，其中6个孩子是金牌，并且被选进国家集训队，直接保送清北。\n孩子在江苏省要走科技特长生路线的话，可选择的学校很多，例如南京外国语学校金陵中学、江苏省淮阴中学、江苏省天一中学、江苏省扬州中学等等都有招生名额。"}, {"province": "江苏省", "city": "扬州", "region": "华东地区", "script": "江苏省是编程成绩很厉害的省份，例如南京外国语学校，江苏省常州高级中学这样的学校，都是在NOI信奥赛国赛获奖排名前10的学校。以2023年为例，南京外国语学校在NOI决赛中能拿到10个奖牌，其中6个孩子是金牌，并且被选进国家集训队，直接保送清北。\n孩子在江苏省要走科技特长生路线的话，可选择的学校很多，例如南京外国语学校金陵中学、江苏省淮阴中学、江苏省天一中学、江苏省扬州中学等等都有招生名额。"}, {"province": "江苏省", "city": "常州", "region": "华东地区", "script": "江苏省是编程成绩很厉害的省份，例如南京外国语学校，江苏省常州高级中学这样的学校，都是在NOI信奥赛国赛获奖排名前10的学校。以2023年为例，南京外国语学校在NOI决赛中能拿到10个奖牌，其中6个孩子是金牌，并且被选进国家集训队，直接保送清北。\n孩子在江苏省要走科技特长生路线的话，可选择的学校很多，例如南京外国语学校金陵中学、江苏省淮阴中学、江苏省天一中学、江苏省扬州中学等等都有招生名额。"}, {"province": "江苏省", "city": "镇江", "region": "华东地区", "script": "江苏省是编程成绩很厉害的省份，例如南京外国语学校，江苏省常州高级中学这样的学校，都是在NOI信奥赛国赛获奖排名前10的学校。以2023年为例，南京外国语学校在NOI决赛中能拿到10个奖牌，其中6个孩子是金牌，并且被选进国家集训队，直接保送清北。\n孩子在江苏省要走科技特长生路线的话，可选择的学校很多，例如南京外国语学校金陵中学、江苏省淮阴中学、江苏省天一中学、江苏省扬州中学等等都有招生名额。"}, {"province": "江苏省", "city": "盐城", "region": "华东地区", "script": "江苏省是编程成绩很厉害的省份，例如南京外国语学校，江苏省常州高级中学这样的学校，都是在NOI信奥赛国赛获奖排名前10的学校。以2023年为例，南京外国语学校在NOI决赛中能拿到10个奖牌，其中6个孩子是金牌，并且被选进国家集训队，直接保送清北。\n孩子在江苏省要走科技特长生路线的话，可选择的学校很多，例如南京外国语学校金陵中学、江苏省淮阴中学、江苏省天一中学、江苏省扬州中学等等都有招生名额。"}, {"province": "江西省", "city": "南昌", "region": "华东地区", "script": "江西的学生在参加CSP比赛中有一定优势，因为目前江西参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。江西科技学院附属中学、江西师大附中都是江西省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n江西的重点学校也有科技特长生政策，例如江西师大附中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "江西省", "city": "上饶", "region": "华东地区", "script": "江西的学生在参加CSP比赛中有一定优势，因为目前江西参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。江西科技学院附属中学、江西师大附中都是江西省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n江西的重点学校也有科技特长生政策，例如江西师大附中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "江西省", "city": "九江", "region": "华东地区", "script": "江西的学生在参加CSP比赛中有一定优势，因为目前江西参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。江西科技学院附属中学、江西师大附中都是江西省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n江西的重点学校也有科技特长生政策，例如江西师大附中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "江西省", "city": "萍乡", "region": "华东地区", "script": "江西的学生在参加CSP比赛中有一定优势，因为目前江西参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。江西科技学院附属中学、江西师大附中都是江西省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n江西的重点学校也有科技特长生政策，例如江西师大附中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "江西省", "city": "新余", "region": "华东地区", "script": "江西的学生在参加CSP比赛中有一定优势，因为目前江西参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。江西科技学院附属中学、江西师大附中都是江西省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n江西的重点学校也有科技特长生政策，例如江西师大附中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "江西省", "city": "鹰潭", "region": "华东地区", "script": "江西的学生在参加CSP比赛中有一定优势，因为目前江西参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。江西科技学院附属中学、江西师大附中都是江西省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n江西的重点学校也有科技特长生政策，例如江西师大附中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "江西省", "city": "赣州", "region": "华东地区", "script": "江西的学生在参加CSP比赛中有一定优势，因为目前江西参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。江西科技学院附属中学、江西师大附中都是江西省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n江西的重点学校也有科技特长生政策，例如江西师大附中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "江西省", "city": "宜春", "region": "华东地区", "script": "江西的学生在参加CSP比赛中有一定优势，因为目前江西参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。江西科技学院附属中学、江西师大附中都是江西省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n江西的重点学校也有科技特长生政策，例如江西师大附中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "江西省", "city": "景德镇", "region": "华东地区", "script": "江西的学生在参加CSP比赛中有一定优势，因为目前江西参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。江西科技学院附属中学、江西师大附中都是江西省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n江西的重点学校也有科技特长生政策，例如江西师大附中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "江西省", "city": "吉安", "region": "华东地区", "script": "江西的学生在参加CSP比赛中有一定优势，因为目前江西参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。江西科技学院附属中学、江西师大附中都是江西省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n江西的重点学校也有科技特长生政策，例如江西师大附中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "江西省", "city": "抚州", "region": "华东地区", "script": "江西的学生在参加CSP比赛中有一定优势，因为目前江西参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。江西科技学院附属中学、江西师大附中都是江西省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n江西的重点学校也有科技特长生政策，例如江西师大附中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "吉林省", "city": "长春", "region": "东北地区", "script": "吉林的学生在参加CSP比赛中有一定优势，因为目前吉林参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n东北师范大学附属中学、长春吉大附中实验学校都是吉林省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "吉林省", "city": "吉林", "region": "东北地区", "script": "吉林的学生在参加CSP比赛中有一定优势，因为目前吉林参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n东北师范大学附属中学、长春吉大附中实验学校都是吉林省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "吉林省", "city": "白城", "region": "东北地区", "script": "吉林的学生在参加CSP比赛中有一定优势，因为目前吉林参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n东北师范大学附属中学、长春吉大附中实验学校都是吉林省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "吉林省", "city": "松原", "region": "东北地区", "script": "吉林的学生在参加CSP比赛中有一定优势，因为目前吉林参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n东北师范大学附属中学、长春吉大附中实验学校都是吉林省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "吉林省", "city": "四平", "region": "东北地区", "script": "吉林的学生在参加CSP比赛中有一定优势，因为目前吉林参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n东北师范大学附属中学、长春吉大附中实验学校都是吉林省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "吉林省", "city": "辽源", "region": "东北地区", "script": "吉林的学生在参加CSP比赛中有一定优势，因为目前吉林参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n东北师范大学附属中学、长春吉大附中实验学校都是吉林省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "吉林省", "city": "通化", "region": "东北地区", "script": "吉林的学生在参加CSP比赛中有一定优势，因为目前吉林参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n东北师范大学附属中学、长春吉大附中实验学校都是吉林省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "吉林省", "city": "白山", "region": "东北地区", "script": "吉林的学生在参加CSP比赛中有一定优势，因为目前吉林参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n东北师范大学附属中学、长春吉大附中实验学校都是吉林省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "辽宁省", "city": "沈阳", "region": "东北地区", "script": "辽宁的学生在参加CSP比赛中有一定优势，因为目前辽宁参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n大连市第二十四中学、东北育才学校、辽宁省实验中学都是辽宁省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "辽宁省", "city": "大连", "region": "东北地区", "script": "辽宁的学生在参加CSP比赛中有一定优势，因为目前辽宁参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n大连市第二十四中学、东北育才学校、辽宁省实验中学都是辽宁省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "辽宁省", "city": "朝阳", "region": "东北地区", "script": "辽宁的学生在参加CSP比赛中有一定优势，因为目前辽宁参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n大连市第二十四中学、东北育才学校、辽宁省实验中学都是辽宁省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "辽宁省", "city": "阜新", "region": "东北地区", "script": "辽宁的学生在参加CSP比赛中有一定优势，因为目前辽宁参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n大连市第二十四中学、东北育才学校、辽宁省实验中学都是辽宁省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "辽宁省", "city": "铁岭", "region": "东北地区", "script": "辽宁的学生在参加CSP比赛中有一定优势，因为目前辽宁参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n大连市第二十四中学、东北育才学校、辽宁省实验中学都是辽宁省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "辽宁省", "city": "抚顺", "region": "东北地区", "script": "辽宁的学生在参加CSP比赛中有一定优势，因为目前辽宁参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n大连市第二十四中学、东北育才学校、辽宁省实验中学都是辽宁省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "辽宁省", "city": "本溪", "region": "东北地区", "script": "辽宁的学生在参加CSP比赛中有一定优势，因为目前辽宁参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n大连市第二十四中学、东北育才学校、辽宁省实验中学都是辽宁省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "辽宁省", "city": "辽阳", "region": "东北地区", "script": "辽宁的学生在参加CSP比赛中有一定优势，因为目前辽宁参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n大连市第二十四中学、东北育才学校、辽宁省实验中学都是辽宁省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "辽宁省", "city": "鞍山", "region": "东北地区", "script": "辽宁的学生在参加CSP比赛中有一定优势，因为目前辽宁参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n大连市第二十四中学、东北育才学校、辽宁省实验中学都是辽宁省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "辽宁省", "city": "丹东", "region": "东北地区", "script": "辽宁的学生在参加CSP比赛中有一定优势，因为目前辽宁参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n大连市第二十四中学、东北育才学校、辽宁省实验中学都是辽宁省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "辽宁省", "city": "营口", "region": "东北地区", "script": "辽宁的学生在参加CSP比赛中有一定优势，因为目前辽宁参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n大连市第二十四中学、东北育才学校、辽宁省实验中学都是辽宁省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "辽宁省", "city": "盘锦", "region": "东北地区", "script": "辽宁的学生在参加CSP比赛中有一定优势，因为目前辽宁参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n大连市第二十四中学、东北育才学校、辽宁省实验中学都是辽宁省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "辽宁省", "city": "锦州", "region": "东北地区", "script": "辽宁的学生在参加CSP比赛中有一定优势，因为目前辽宁参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n大连市第二十四中学、东北育才学校、辽宁省实验中学都是辽宁省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "辽宁省", "city": "葫芦岛", "region": "东北地区", "script": "辽宁的学生在参加CSP比赛中有一定优势，因为目前辽宁参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n大连市第二十四中学、东北育才学校、辽宁省实验中学都是辽宁省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "内蒙古自治区", "city": "呼和浩特", "region": "华北地区", "script": "内蒙古的学生在参加CSP比赛中有一定优势，因为目前内蒙古参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "内蒙古自治区", "city": "兴安盟", "region": "华北地区", "script": "内蒙古的学生在参加CSP比赛中有一定优势，因为目前内蒙古参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "内蒙古自治区", "city": "乌兰察布市", "region": "华北地区", "script": "内蒙古的学生在参加CSP比赛中有一定优势，因为目前内蒙古参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "宁夏回族自治区", "city": "银川", "region": "西北地区", "script": "宁夏的学生在参加CSP比赛中有一定优势，因为目前宁夏参与的学生较少，竞争小更容易拿奖，学生可以弯道超车，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n虽然目前宁夏还没有很明确的官方科技特长生政策，但目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "青海省", "city": "西宁", "region": "西北地区", "script": "青海的学生在参加CSP比赛中有一定优势，因为目前青海参与的学生较少，竞争小更容易拿奖，学生可以弯道超车，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n虽然目前青海还没有很明确的官方科技特长生政策，但目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "青海省", "city": "海东", "region": "西北地区", "script": "青海的学生在参加CSP比赛中有一定优势，因为目前青海参与的学生较少，竞争小更容易拿奖，学生可以弯道超车，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n虽然目前青海还没有很明确的官方科技特长生政策，但目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "上海市", "city": "上海", "region": "华东地区", "script": "上海是很重视培养科创人才的，除了广泛开展科创活动，如上海市青少年人工智能与编程实践活动、上海市青少年算法竞赛，部分学校还在招收科创班，如上外附中就在2022年开始新增了多语种科创人才班。在上海的学生有很多能培养科学素养的活动。\n上海不少重点学校都有科技特长生政策，例如华东师大第二附中、复旦大学附中、上海市徐汇中学、上海市杨浦高级中学、同济大学第一附属中学等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "山东省", "city": "济南", "region": "华东地区", "script": "山东省的中高考很卷，科技特长生政策就是在升学路上弯道超车，能以同样的分数进更好的学校。像山东青岛第二中学、烟台第二中学、济南西城实验中学、济南外国语学校三箭分校、青岛城阳二中等等，这些学校都有科技特长生招生政策，中招时可以通过走科技特长生升入重点中学；\n像青岛二中、东营胜利一中、烟台二中、平邑一中、济南市历城二中，这些学校的信奥赛成绩很优秀，每年在CSP中拿三等奖以上的孩子都很多，有个别孩子还能拿下NOI国赛金牌，被选入国家集训队，直接保送清北！"}, {"province": "山东省", "city": "青岛", "region": "华东地区", "script": "山东省的中高考很卷，科技特长生政策就是在升学路上弯道超车，能以同样的分数进更好的学校。像山东青岛第二中学、烟台第二中学、济南西城实验中学、济南外国语学校三箭分校、青岛城阳二中等等，这些学校都有科技特长生招生政策，中招时可以通过走科技特长生升入重点中学；\n像青岛二中、东营胜利一中、烟台二中、平邑一中、济南市历城二中，这些学校的信奥赛成绩很优秀，每年在CSP中拿三等奖以上的孩子都很多，有个别孩子还能拿下NOI国赛金牌，被选入国家集训队，直接保送清北！"}, {"province": "山东省", "city": "淄博", "region": "华东地区", "script": "山东省的中高考很卷，科技特长生政策就是在升学路上弯道超车，能以同样的分数进更好的学校。像山东青岛第二中学、烟台第二中学、济南西城实验中学、济南外国语学校三箭分校、青岛城阳二中等等，这些学校都有科技特长生招生政策，中招时可以通过走科技特长生升入重点中学；\n像青岛二中、东营胜利一中、烟台二中、平邑一中、济南市历城二中，这些学校的信奥赛成绩很优秀，每年在CSP中拿三等奖以上的孩子都很多，有个别孩子还能拿下NOI国赛金牌，被选入国家集训队，直接保送清北！"}, {"province": "山东省", "city": "枣庄", "region": "华东地区", "script": "山东省的中高考很卷，科技特长生政策就是在升学路上弯道超车，能以同样的分数进更好的学校。像山东青岛第二中学、烟台第二中学、济南西城实验中学、济南外国语学校三箭分校、青岛城阳二中等等，这些学校都有科技特长生招生政策，中招时可以通过走科技特长生升入重点中学；\n像青岛二中、东营胜利一中、烟台二中、平邑一中、济南市历城二中，这些学校的信奥赛成绩很优秀，每年在CSP中拿三等奖以上的孩子都很多，有个别孩子还能拿下NOI国赛金牌，被选入国家集训队，直接保送清北！"}, {"province": "山东省", "city": "东营", "region": "华东地区", "script": "山东省的中高考很卷，科技特长生政策就是在升学路上弯道超车，能以同样的分数进更好的学校。像山东青岛第二中学、烟台第二中学、济南西城实验中学、济南外国语学校三箭分校、青岛城阳二中等等，这些学校都有科技特长生招生政策，中招时可以通过走科技特长生升入重点中学；\n像青岛二中、东营胜利一中、烟台二中、平邑一中、济南市历城二中，这些学校的信奥赛成绩很优秀，每年在CSP中拿三等奖以上的孩子都很多，有个别孩子还能拿下NOI国赛金牌，被选入国家集训队，直接保送清北！"}, {"province": "山东省", "city": "烟台", "region": "华东地区", "script": "山东省的中高考很卷，科技特长生政策就是在升学路上弯道超车，能以同样的分数进更好的学校。像山东青岛第二中学、烟台第二中学、济南西城实验中学、济南外国语学校三箭分校、青岛城阳二中等等，这些学校都有科技特长生招生政策，中招时可以通过走科技特长生升入重点中学；\n像青岛二中、东营胜利一中、烟台二中、平邑一中、济南市历城二中，这些学校的信奥赛成绩很优秀，每年在CSP中拿三等奖以上的孩子都很多，有个别孩子还能拿下NOI国赛金牌，被选入国家集训队，直接保送清北！"}, {"province": "山东省", "city": "潍坊", "region": "华东地区", "script": "山东省的中高考很卷，科技特长生政策就是在升学路上弯道超车，能以同样的分数进更好的学校。像山东青岛第二中学、烟台第二中学、济南西城实验中学、济南外国语学校三箭分校、青岛城阳二中等等，这些学校都有科技特长生招生政策，中招时可以通过走科技特长生升入重点中学；\n像青岛二中、东营胜利一中、烟台二中、平邑一中、济南市历城二中，这些学校的信奥赛成绩很优秀，每年在CSP中拿三等奖以上的孩子都很多，有个别孩子还能拿下NOI国赛金牌，被选入国家集训队，直接保送清北！"}, {"province": "山东省", "city": "济宁", "region": "华东地区", "script": "山东省的中高考很卷，科技特长生政策就是在升学路上弯道超车，能以同样的分数进更好的学校。像山东青岛第二中学、烟台第二中学、济南西城实验中学、济南外国语学校三箭分校、青岛城阳二中等等，这些学校都有科技特长生招生政策，中招时可以通过走科技特长生升入重点中学；\n像青岛二中、东营胜利一中、烟台二中、平邑一中、济南市历城二中，这些学校的信奥赛成绩很优秀，每年在CSP中拿三等奖以上的孩子都很多，有个别孩子还能拿下NOI国赛金牌，被选入国家集训队，直接保送清北！"}, {"province": "山东省", "city": "泰安", "region": "华东地区", "script": "山东省的中高考很卷，科技特长生政策就是在升学路上弯道超车，能以同样的分数进更好的学校。像山东青岛第二中学、烟台第二中学、济南西城实验中学、济南外国语学校三箭分校、青岛城阳二中等等，这些学校都有科技特长生招生政策，中招时可以通过走科技特长生升入重点中学；\n像青岛二中、东营胜利一中、烟台二中、平邑一中、济南市历城二中，这些学校的信奥赛成绩很优秀，每年在CSP中拿三等奖以上的孩子都很多，有个别孩子还能拿下NOI国赛金牌，被选入国家集训队，直接保送清北！"}, {"province": "山东省", "city": "威海", "region": "华东地区", "script": "山东省的中高考很卷，科技特长生政策就是在升学路上弯道超车，能以同样的分数进更好的学校。像山东青岛第二中学、烟台第二中学、济南西城实验中学、济南外国语学校三箭分校、青岛城阳二中等等，这些学校都有科技特长生招生政策，中招时可以通过走科技特长生升入重点中学；\n像青岛二中、东营胜利一中、烟台二中、平邑一中、济南市历城二中，这些学校的信奥赛成绩很优秀，每年在CSP中拿三等奖以上的孩子都很多，有个别孩子还能拿下NOI国赛金牌，被选入国家集训队，直接保送清北！"}, {"province": "山东省", "city": "日照", "region": "华东地区", "script": "山东省的中高考很卷，科技特长生政策就是在升学路上弯道超车，能以同样的分数进更好的学校。像山东青岛第二中学、烟台第二中学、济南西城实验中学、济南外国语学校三箭分校、青岛城阳二中等等，这些学校都有科技特长生招生政策，中招时可以通过走科技特长生升入重点中学；\n像青岛二中、东营胜利一中、烟台二中、平邑一中、济南市历城二中，这些学校的信奥赛成绩很优秀，每年在CSP中拿三等奖以上的孩子都很多，有个别孩子还能拿下NOI国赛金牌，被选入国家集训队，直接保送清北！"}, {"province": "山东省", "city": "滨州", "region": "华东地区", "script": "山东省的中高考很卷，科技特长生政策就是在升学路上弯道超车，能以同样的分数进更好的学校。像山东青岛第二中学、烟台第二中学、济南西城实验中学、济南外国语学校三箭分校、青岛城阳二中等等，这些学校都有科技特长生招生政策，中招时可以通过走科技特长生升入重点中学；\n像青岛二中、东营胜利一中、烟台二中、平邑一中、济南市历城二中，这些学校的信奥赛成绩很优秀，每年在CSP中拿三等奖以上的孩子都很多，有个别孩子还能拿下NOI国赛金牌，被选入国家集训队，直接保送清北！"}, {"province": "山东省", "city": "德州", "region": "华东地区", "script": "山东省的中高考很卷，科技特长生政策就是在升学路上弯道超车，能以同样的分数进更好的学校。像山东青岛第二中学、烟台第二中学、济南西城实验中学、济南外国语学校三箭分校、青岛城阳二中等等，这些学校都有科技特长生招生政策，中招时可以通过走科技特长生升入重点中学；\n像青岛二中、东营胜利一中、烟台二中、平邑一中、济南市历城二中，这些学校的信奥赛成绩很优秀，每年在CSP中拿三等奖以上的孩子都很多，有个别孩子还能拿下NOI国赛金牌，被选入国家集训队，直接保送清北！"}, {"province": "山东省", "city": "聊城", "region": "华东地区", "script": "山东省的中高考很卷，科技特长生政策就是在升学路上弯道超车，能以同样的分数进更好的学校。像山东青岛第二中学、烟台第二中学、济南西城实验中学、济南外国语学校三箭分校、青岛城阳二中等等，这些学校都有科技特长生招生政策，中招时可以通过走科技特长生升入重点中学；\n像青岛二中、东营胜利一中、烟台二中、平邑一中、济南市历城二中，这些学校的信奥赛成绩很优秀，每年在CSP中拿三等奖以上的孩子都很多，有个别孩子还能拿下NOI国赛金牌，被选入国家集训队，直接保送清北！"}, {"province": "山东省", "city": "临沂", "region": "华东地区", "script": "山东省的中高考很卷，科技特长生政策就是在升学路上弯道超车，能以同样的分数进更好的学校。像山东青岛第二中学、烟台第二中学、济南西城实验中学、济南外国语学校三箭分校、青岛城阳二中等等，这些学校都有科技特长生招生政策，中招时可以通过走科技特长生升入重点中学；\n像青岛二中、东营胜利一中、烟台二中、平邑一中、济南市历城二中，这些学校的信奥赛成绩很优秀，每年在CSP中拿三等奖以上的孩子都很多，有个别孩子还能拿下NOI国赛金牌，被选入国家集训队，直接保送清北！"}, {"province": "山东省", "city": "菏泽", "region": "华东地区", "script": "山东省的中高考很卷，科技特长生政策就是在升学路上弯道超车，能以同样的分数进更好的学校。像山东青岛第二中学、烟台第二中学、济南西城实验中学、济南外国语学校三箭分校、青岛城阳二中等等，这些学校都有科技特长生招生政策，中招时可以通过走科技特长生升入重点中学；\n像青岛二中、东营胜利一中、烟台二中、平邑一中、济南市历城二中，这些学校的信奥赛成绩很优秀，每年在CSP中拿三等奖以上的孩子都很多，有个别孩子还能拿下NOI国赛金牌，被选入国家集训队，直接保送清北！"}, {"province": "山西省", "city": "太原", "region": "华北地区", "script": "山西的学生在参加CSP比赛中有一定优势，因为目前山西参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n山西大学附属中学、晋城一中都是山西省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "山西省", "city": "大同", "region": "华北地区", "script": "山西的学生在参加CSP比赛中有一定优势，因为目前山西参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n山西大学附属中学、晋城一中都是山西省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "山西省", "city": "阳泉", "region": "华北地区", "script": "山西的学生在参加CSP比赛中有一定优势，因为目前山西参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n山西大学附属中学、晋城一中都是山西省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "山西省", "city": "长治", "region": "华北地区", "script": "山西的学生在参加CSP比赛中有一定优势，因为目前山西参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n山西大学附属中学、晋城一中都是山西省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "山西省", "city": "晋城", "region": "华北地区", "script": "山西的学生在参加CSP比赛中有一定优势，因为目前山西参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n山西大学附属中学、晋城一中都是山西省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "山西省", "city": "朔州", "region": "华北地区", "script": "山西的学生在参加CSP比赛中有一定优势，因为目前山西参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n山西大学附属中学、晋城一中都是山西省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "山西省", "city": "晋中", "region": "华北地区", "script": "山西的学生在参加CSP比赛中有一定优势，因为目前山西参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n山西大学附属中学、晋城一中都是山西省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "山西省", "city": "运城", "region": "华北地区", "script": "山西的学生在参加CSP比赛中有一定优势，因为目前山西参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n山西大学附属中学、晋城一中都是山西省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "山西省", "city": "忻州", "region": "华北地区", "script": "山西的学生在参加CSP比赛中有一定优势，因为目前山西参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n山西大学附属中学、晋城一中都是山西省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "山西省", "city": "临汾", "region": "华北地区", "script": "山西的学生在参加CSP比赛中有一定优势，因为目前山西参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n山西大学附属中学、晋城一中都是山西省在信奥赛中表现较好的学校，如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。"}, {"province": "陕西省", "city": "西安", "region": "西北地区", "script": "陕西省的学生在参加CSP比赛中有一定优势，因为目前陕西省参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n西北工业大学附属中学、西安交通大学附属中学都是陕西省在信奥赛中表现较好的学校。学生在信奥赛中拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学！"}, {"province": "陕西省", "city": "铜川", "region": "西北地区", "script": "陕西省的学生在参加CSP比赛中有一定优势，因为目前陕西省参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n西北工业大学附属中学、西安交通大学附属中学都是陕西省在信奥赛中表现较好的学校。学生在信奥赛中拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学！"}, {"province": "陕西省", "city": "宝鸡", "region": "西北地区", "script": "陕西省的学生在参加CSP比赛中有一定优势，因为目前陕西省参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n西北工业大学附属中学、西安交通大学附属中学都是陕西省在信奥赛中表现较好的学校。学生在信奥赛中拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学！"}, {"province": "陕西省", "city": "咸阳", "region": "西北地区", "script": "陕西省的学生在参加CSP比赛中有一定优势，因为目前陕西省参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n西北工业大学附属中学、西安交通大学附属中学都是陕西省在信奥赛中表现较好的学校。学生在信奥赛中拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学！"}, {"province": "陕西省", "city": "渭南", "region": "西北地区", "script": "陕西省的学生在参加CSP比赛中有一定优势，因为目前陕西省参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n西北工业大学附属中学、西安交通大学附属中学都是陕西省在信奥赛中表现较好的学校。学生在信奥赛中拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学！"}, {"province": "陕西省", "city": "延安", "region": "西北地区", "script": "陕西省的学生在参加CSP比赛中有一定优势，因为目前陕西省参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n西北工业大学附属中学、西安交通大学附属中学都是陕西省在信奥赛中表现较好的学校。学生在信奥赛中拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学！"}, {"province": "陕西省", "city": "汉中", "region": "西北地区", "script": "陕西省的学生在参加CSP比赛中有一定优势，因为目前陕西省参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n西北工业大学附属中学、西安交通大学附属中学都是陕西省在信奥赛中表现较好的学校。学生在信奥赛中拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学！"}, {"province": "陕西省", "city": "榆林", "region": "西北地区", "script": "陕西省的学生在参加CSP比赛中有一定优势，因为目前陕西省参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n西北工业大学附属中学、西安交通大学附属中学都是陕西省在信奥赛中表现较好的学校。学生在信奥赛中拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学！"}, {"province": "陕西省", "city": "安康", "region": "西北地区", "script": "陕西省的学生在参加CSP比赛中有一定优势，因为目前陕西省参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n西北工业大学附属中学、西安交通大学附属中学都是陕西省在信奥赛中表现较好的学校。学生在信奥赛中拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学！"}, {"province": "陕西省", "city": "商洛", "region": "西北地区", "script": "陕西省的学生在参加CSP比赛中有一定优势，因为目前陕西省参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。\n西北工业大学附属中学、西安交通大学附属中学都是陕西省在信奥赛中表现较好的学校。学生在信奥赛中拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学！"}, {"province": "四川省", "city": "成都", "region": "西南地区", "script": "四川是编程成绩很强的省，例如成都七中、成都外国语学校等，都在NOI中有很出色的成绩。2023年，成都七中的NOI国赛成绩中，就有12个学生斩获5个金牌7个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。这类在科技类竞赛中很强的中学，学校都会直接根据信奥赛成绩筛选在编程方面表现极好的学生。\n四川有科技特长生招生政策的学校也很多，例如华阳中学、成都双流中学、电子科技大学实验中学、简阳中学、成都市第二中学等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！"}, {"province": "四川省", "city": "广元", "region": "西南地区", "script": "四川是编程成绩很强的省，例如成都七中、成都外国语学校等，都在NOI中有很出色的成绩。2023年，成都七中的NOI国赛成绩中，就有12个学生斩获5个金牌7个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。这类在科技类竞赛中很强的中学，学校都会直接根据信奥赛成绩筛选在编程方面表现极好的学生。\n四川有科技特长生招生政策的学校也很多，例如华阳中学、成都双流中学、电子科技大学实验中学、简阳中学、成都市第二中学等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！"}, {"province": "四川省", "city": "绵阳", "region": "西南地区", "script": "四川是编程成绩很强的省，例如成都七中、成都外国语学校等，都在NOI中有很出色的成绩。2023年，成都七中的NOI国赛成绩中，就有12个学生斩获5个金牌7个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。这类在科技类竞赛中很强的中学，学校都会直接根据信奥赛成绩筛选在编程方面表现极好的学生。\n四川有科技特长生招生政策的学校也很多，例如华阳中学、成都双流中学、电子科技大学实验中学、简阳中学、成都市第二中学等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！"}, {"province": "四川省", "city": "德阳", "region": "西南地区", "script": "四川是编程成绩很强的省，例如成都七中、成都外国语学校等，都在NOI中有很出色的成绩。2023年，成都七中的NOI国赛成绩中，就有12个学生斩获5个金牌7个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。这类在科技类竞赛中很强的中学，学校都会直接根据信奥赛成绩筛选在编程方面表现极好的学生。\n四川有科技特长生招生政策的学校也很多，例如华阳中学、成都双流中学、电子科技大学实验中学、简阳中学、成都市第二中学等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！"}, {"province": "四川省", "city": "南充", "region": "西南地区", "script": "四川是编程成绩很强的省，例如成都七中、成都外国语学校等，都在NOI中有很出色的成绩。2023年，成都七中的NOI国赛成绩中，就有12个学生斩获5个金牌7个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。这类在科技类竞赛中很强的中学，学校都会直接根据信奥赛成绩筛选在编程方面表现极好的学生。\n四川有科技特长生招生政策的学校也很多，例如华阳中学、成都双流中学、电子科技大学实验中学、简阳中学、成都市第二中学等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！"}, {"province": "四川省", "city": "广安", "region": "西南地区", "script": "四川是编程成绩很强的省，例如成都七中、成都外国语学校等，都在NOI中有很出色的成绩。2023年，成都七中的NOI国赛成绩中，就有12个学生斩获5个金牌7个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。这类在科技类竞赛中很强的中学，学校都会直接根据信奥赛成绩筛选在编程方面表现极好的学生。\n四川有科技特长生招生政策的学校也很多，例如华阳中学、成都双流中学、电子科技大学实验中学、简阳中学、成都市第二中学等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！"}, {"province": "四川省", "city": "遂宁", "region": "西南地区", "script": "四川是编程成绩很强的省，例如成都七中、成都外国语学校等，都在NOI中有很出色的成绩。2023年，成都七中的NOI国赛成绩中，就有12个学生斩获5个金牌7个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。这类在科技类竞赛中很强的中学，学校都会直接根据信奥赛成绩筛选在编程方面表现极好的学生。\n四川有科技特长生招生政策的学校也很多，例如华阳中学、成都双流中学、电子科技大学实验中学、简阳中学、成都市第二中学等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！"}, {"province": "四川省", "city": "内江", "region": "西南地区", "script": "四川是编程成绩很强的省，例如成都七中、成都外国语学校等，都在NOI中有很出色的成绩。2023年，成都七中的NOI国赛成绩中，就有12个学生斩获5个金牌7个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。这类在科技类竞赛中很强的中学，学校都会直接根据信奥赛成绩筛选在编程方面表现极好的学生。\n四川有科技特长生招生政策的学校也很多，例如华阳中学、成都双流中学、电子科技大学实验中学、简阳中学、成都市第二中学等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！"}, {"province": "四川省", "city": "乐山", "region": "西南地区", "script": "四川是编程成绩很强的省，例如成都七中、成都外国语学校等，都在NOI中有很出色的成绩。2023年，成都七中的NOI国赛成绩中，就有12个学生斩获5个金牌7个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。这类在科技类竞赛中很强的中学，学校都会直接根据信奥赛成绩筛选在编程方面表现极好的学生。\n四川有科技特长生招生政策的学校也很多，例如华阳中学、成都双流中学、电子科技大学实验中学、简阳中学、成都市第二中学等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！"}, {"province": "四川省", "city": "自贡", "region": "西南地区", "script": "四川是编程成绩很强的省，例如成都七中、成都外国语学校等，都在NOI中有很出色的成绩。2023年，成都七中的NOI国赛成绩中，就有12个学生斩获5个金牌7个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。这类在科技类竞赛中很强的中学，学校都会直接根据信奥赛成绩筛选在编程方面表现极好的学生。\n四川有科技特长生招生政策的学校也很多，例如华阳中学、成都双流中学、电子科技大学实验中学、简阳中学、成都市第二中学等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！"}, {"province": "四川省", "city": "泸州", "region": "西南地区", "script": "四川是编程成绩很强的省，例如成都七中、成都外国语学校等，都在NOI中有很出色的成绩。2023年，成都七中的NOI国赛成绩中，就有12个学生斩获5个金牌7个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。这类在科技类竞赛中很强的中学，学校都会直接根据信奥赛成绩筛选在编程方面表现极好的学生。\n四川有科技特长生招生政策的学校也很多，例如华阳中学、成都双流中学、电子科技大学实验中学、简阳中学、成都市第二中学等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！"}, {"province": "四川省", "city": "宜宾", "region": "西南地区", "script": "四川是编程成绩很强的省，例如成都七中、成都外国语学校等，都在NOI中有很出色的成绩。2023年，成都七中的NOI国赛成绩中，就有12个学生斩获5个金牌7个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。这类在科技类竞赛中很强的中学，学校都会直接根据信奥赛成绩筛选在编程方面表现极好的学生。\n四川有科技特长生招生政策的学校也很多，例如华阳中学、成都双流中学、电子科技大学实验中学、简阳中学、成都市第二中学等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！"}, {"province": "四川省", "city": "攀枝花", "region": "西南地区", "script": "四川是编程成绩很强的省，例如成都七中、成都外国语学校等，都在NOI中有很出色的成绩。2023年，成都七中的NOI国赛成绩中，就有12个学生斩获5个金牌7个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。这类在科技类竞赛中很强的中学，学校都会直接根据信奥赛成绩筛选在编程方面表现极好的学生。\n四川有科技特长生招生政策的学校也很多，例如华阳中学、成都双流中学、电子科技大学实验中学、简阳中学、成都市第二中学等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！"}, {"province": "四川省", "city": "巴中", "region": "西南地区", "script": "四川是编程成绩很强的省，例如成都七中、成都外国语学校等，都在NOI中有很出色的成绩。2023年，成都七中的NOI国赛成绩中，就有12个学生斩获5个金牌7个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。这类在科技类竞赛中很强的中学，学校都会直接根据信奥赛成绩筛选在编程方面表现极好的学生。\n四川有科技特长生招生政策的学校也很多，例如华阳中学、成都双流中学、电子科技大学实验中学、简阳中学、成都市第二中学等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！"}, {"province": "四川省", "city": "达州", "region": "西南地区", "script": "四川是编程成绩很强的省，例如成都七中、成都外国语学校等，都在NOI中有很出色的成绩。2023年，成都七中的NOI国赛成绩中，就有12个学生斩获5个金牌7个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。这类在科技类竞赛中很强的中学，学校都会直接根据信奥赛成绩筛选在编程方面表现极好的学生。\n四川有科技特长生招生政策的学校也很多，例如华阳中学、成都双流中学、电子科技大学实验中学、简阳中学、成都市第二中学等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！"}, {"province": "四川省", "city": "资阳", "region": "西南地区", "script": "四川是编程成绩很强的省，例如成都七中、成都外国语学校等，都在NOI中有很出色的成绩。2023年，成都七中的NOI国赛成绩中，就有12个学生斩获5个金牌7个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。这类在科技类竞赛中很强的中学，学校都会直接根据信奥赛成绩筛选在编程方面表现极好的学生。\n四川有科技特长生招生政策的学校也很多，例如华阳中学、成都双流中学、电子科技大学实验中学、简阳中学、成都市第二中学等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！"}, {"province": "四川省", "city": "眉山", "region": "西南地区", "script": "四川是编程成绩很强的省，例如成都七中、成都外国语学校等，都在NOI中有很出色的成绩。2023年，成都七中的NOI国赛成绩中，就有12个学生斩获5个金牌7个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。这类在科技类竞赛中很强的中学，学校都会直接根据信奥赛成绩筛选在编程方面表现极好的学生。\n四川有科技特长生招生政策的学校也很多，例如华阳中学、成都双流中学、电子科技大学实验中学、简阳中学、成都市第二中学等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！"}, {"province": "四川省", "city": "雅安", "region": "西南地区", "script": "四川是编程成绩很强的省，例如成都七中、成都外国语学校等，都在NOI中有很出色的成绩。2023年，成都七中的NOI国赛成绩中，就有12个学生斩获5个金牌7个银牌，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。这类在科技类竞赛中很强的中学，学校都会直接根据信奥赛成绩筛选在编程方面表现极好的学生。\n四川有科技特长生招生政策的学校也很多，例如华阳中学、成都双流中学、电子科技大学实验中学、简阳中学、成都市第二中学等等，孩子走科技特长生路线，就能在中招时选择这类重点高中，赢在高考起跑线！"}, {"province": "台湾省", "city": "台湾", "region": "华东地区", "script": "暂缺"}, {"province": "天津市", "city": "天津", "region": "华北地区", "script": "天津是很重视编程教育的地区，像天津实验中学、天津一中、南开中学等重点学校，都开始招收科技创新实验班，大力培养科创人才。\n天津很多重点中学都有科技特长生政策，例如耀华中学、天津中学、南开中学等等，这些学校在中招时都会招科技特长生。\n孩子在编程类竞赛中拿到不错的成绩，就可以通过走科技特长生政策，或者报名科技创新实验班，升入重点中学，赢在起跑线！"}, {"province": "香港特别行政区", "city": "香港", "region": "华南地区", "script": "暂缺"}, {"province": "新疆维吾尔自治区", "city": "乌鲁木齐", "region": "西北地区", "script": "新疆的学生在参加CSP比赛中有一定优势，因为目前新疆参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n新疆这些重点学校都有科技特长生政策，例如新疆乌鲁木齐市八一中学、新疆师大附中高中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "新疆维吾尔自治区", "city": "巴音郭楞蒙古自治州", "region": "西北地区", "script": "新疆的学生在参加CSP比赛中有一定优势，因为目前新疆参与的学生较少，竞争小更容易拿奖，学生可以弯道超车。如果学生拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n新疆这些重点学校都有科技特长生政策，例如新疆乌鲁木齐市八一中学、新疆师大附中高中等等，这些学校在中招时都会招科技特长生，孩子通过走科技特长生就能升入这样的重点中学，赢在起跑线！"}, {"province": "西藏自治区", "city": "拉萨", "region": "西南地区", "script": "西藏的学生在参加CSP比赛中有一定优势，因为目前西藏参与的学生较少，竞争小更容易拿奖，学生可以弯道超车，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n虽然目前西藏还没有很明确的官方科技特长生政策，但目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "云南省", "city": "昆明", "region": "西南地区", "script": "云南省的学生在参加CSP比赛中有一定优势，因为目前云南省参与的学生较少，竞争小更容易拿奖，学生可以弯道超车，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n虽然目前云南省还没有很明确的官方科技特长生政策，但目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "云南省", "city": "曲靖", "region": "西南地区", "script": "云南省的学生在参加CSP比赛中有一定优势，因为目前云南省参与的学生较少，竞争小更容易拿奖，学生可以弯道超车，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n虽然目前云南省还没有很明确的官方科技特长生政策，但目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "云南省", "city": "玉溪", "region": "西南地区", "script": "云南省的学生在参加CSP比赛中有一定优势，因为目前云南省参与的学生较少，竞争小更容易拿奖，学生可以弯道超车，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n虽然目前云南省还没有很明确的官方科技特长生政策，但目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "云南省", "city": "丽江", "region": "西南地区", "script": "云南省的学生在参加CSP比赛中有一定优势，因为目前云南省参与的学生较少，竞争小更容易拿奖，学生可以弯道超车，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n虽然目前云南省还没有很明确的官方科技特长生政策，但目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "云南省", "city": "昭通", "region": "西南地区", "script": "云南省的学生在参加CSP比赛中有一定优势，因为目前云南省参与的学生较少，竞争小更容易拿奖，学生可以弯道超车，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n虽然目前云南省还没有很明确的官方科技特长生政策，但目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "云南省", "city": "普洱", "region": "西南地区", "script": "云南省的学生在参加CSP比赛中有一定优势，因为目前云南省参与的学生较少，竞争小更容易拿奖，学生可以弯道超车，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n虽然目前云南省还没有很明确的官方科技特长生政策，但目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "云南省", "city": "临沧", "region": "西南地区", "script": "云南省的学生在参加CSP比赛中有一定优势，因为目前云南省参与的学生较少，竞争小更容易拿奖，学生可以弯道超车，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n虽然目前云南省还没有很明确的官方科技特长生政策，但目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "云南省", "city": "保山", "region": "西南地区", "script": "云南省的学生在参加CSP比赛中有一定优势，因为目前云南省参与的学生较少，竞争小更容易拿奖，学生可以弯道超车，拿下NOI金牌且选入国家集训队就能保送清北，银牌也能破格参与强基计划进重点大学。\n虽然目前云南省还没有很明确的官方科技特长生政策，但目前科技特长生的全国省份覆盖率已达到88%，并且目前国家立足科技兴国、科技强国战略方针，对科技创新型人才需求增大，我国数字人才缺口已经超过1000万。所以在科技特长方面培养孩子，是十分具备前瞻性的决定。"}, {"province": "浙江省", "city": "杭州", "region": "华东地区", "script": "浙江省是中高考很卷的省份，并且十分重视编程，已经正式纳入浙江省高考。尽早开始学编程，高考时候的编程题对于孩子来说就是送分题，能在高考中跑赢一大波人。\n浙江省中招时有科技特长生招生政策的学校也很多，例如绍兴一中、杭州市萧山中学、杭州市萧山第三高级中学、姜山中学、台州市第一中学、北师大台州附中等等，这些中学有一部分在NOI成绩中表现很不错，拿下NOI国赛金牌，被选入国家集训队，就能直接保送清北！孩子走科技特长生路线，在中招里选择这类重点高中，可以赢在高考起跑线！"}, {"province": "浙江省", "city": "宁波", "region": "华东地区", "script": "浙江省是中高考很卷的省份，并且十分重视编程，已经正式纳入浙江省高考。尽早开始学编程，高考时候的编程题对于孩子来说就是送分题，能在高考中跑赢一大波人。\n浙江省中招时有科技特长生招生政策的学校也很多，例如绍兴一中、杭州市萧山中学、杭州市萧山第三高级中学、姜山中学、台州市第一中学、北师大台州附中等等，这些中学有一部分在NOI成绩中表现很不错，拿下NOI国赛金牌，被选入国家集训队，就能直接保送清北！孩子走科技特长生路线，在中招里选择这类重点高中，可以赢在高考起跑线！"}, {"province": "浙江省", "city": "温州", "region": "华东地区", "script": "浙江省是中高考很卷的省份，并且十分重视编程，已经正式纳入浙江省高考。尽早开始学编程，高考时候的编程题对于孩子来说就是送分题，能在高考中跑赢一大波人。\n浙江省中招时有科技特长生招生政策的学校也很多，例如绍兴一中、杭州市萧山中学、杭州市萧山第三高级中学、姜山中学、台州市第一中学、北师大台州附中等等，这些中学有一部分在NOI成绩中表现很不错，拿下NOI国赛金牌，被选入国家集训队，就能直接保送清北！孩子走科技特长生路线，在中招里选择这类重点高中，可以赢在高考起跑线！"}, {"province": "浙江省", "city": "嘉兴", "region": "华东地区", "script": "浙江省是中高考很卷的省份，并且十分重视编程，已经正式纳入浙江省高考。尽早开始学编程，高考时候的编程题对于孩子来说就是送分题，能在高考中跑赢一大波人。\n浙江省中招时有科技特长生招生政策的学校也很多，例如绍兴一中、杭州市萧山中学、杭州市萧山第三高级中学、姜山中学、台州市第一中学、北师大台州附中等等，这些中学有一部分在NOI成绩中表现很不错，拿下NOI国赛金牌，被选入国家集训队，就能直接保送清北！孩子走科技特长生路线，在中招里选择这类重点高中，可以赢在高考起跑线！"}, {"province": "浙江省", "city": "湖州", "region": "华东地区", "script": "浙江省是中高考很卷的省份，并且十分重视编程，已经正式纳入浙江省高考。尽早开始学编程，高考时候的编程题对于孩子来说就是送分题，能在高考中跑赢一大波人。\n浙江省中招时有科技特长生招生政策的学校也很多，例如绍兴一中、杭州市萧山中学、杭州市萧山第三高级中学、姜山中学、台州市第一中学、北师大台州附中等等，这些中学有一部分在NOI成绩中表现很不错，拿下NOI国赛金牌，被选入国家集训队，就能直接保送清北！孩子走科技特长生路线，在中招里选择这类重点高中，可以赢在高考起跑线！"}, {"province": "浙江省", "city": "绍兴", "region": "华东地区", "script": "浙江省是中高考很卷的省份，并且十分重视编程，已经正式纳入浙江省高考。尽早开始学编程，高考时候的编程题对于孩子来说就是送分题，能在高考中跑赢一大波人。\n浙江省中招时有科技特长生招生政策的学校也很多，例如绍兴一中、杭州市萧山中学、杭州市萧山第三高级中学、姜山中学、台州市第一中学、北师大台州附中等等，这些中学有一部分在NOI成绩中表现很不错，拿下NOI国赛金牌，被选入国家集训队，就能直接保送清北！孩子走科技特长生路线，在中招里选择这类重点高中，可以赢在高考起跑线！"}, {"province": "浙江省", "city": "金华", "region": "华东地区", "script": "浙江省是中高考很卷的省份，并且十分重视编程，已经正式纳入浙江省高考。尽早开始学编程，高考时候的编程题对于孩子来说就是送分题，能在高考中跑赢一大波人。\n浙江省中招时有科技特长生招生政策的学校也很多，例如绍兴一中、杭州市萧山中学、杭州市萧山第三高级中学、姜山中学、台州市第一中学、北师大台州附中等等，这些中学有一部分在NOI成绩中表现很不错，拿下NOI国赛金牌，被选入国家集训队，就能直接保送清北！孩子走科技特长生路线，在中招里选择这类重点高中，可以赢在高考起跑线！"}, {"province": "浙江省", "city": "衢州", "region": "华东地区", "script": "浙江省是中高考很卷的省份，并且十分重视编程，已经正式纳入浙江省高考。尽早开始学编程，高考时候的编程题对于孩子来说就是送分题，能在高考中跑赢一大波人。\n浙江省中招时有科技特长生招生政策的学校也很多，例如绍兴一中、杭州市萧山中学、杭州市萧山第三高级中学、姜山中学、台州市第一中学、北师大台州附中等等，这些中学有一部分在NOI成绩中表现很不错，拿下NOI国赛金牌，被选入国家集训队，就能直接保送清北！孩子走科技特长生路线，在中招里选择这类重点高中，可以赢在高考起跑线！"}, {"province": "浙江省", "city": "舟山", "region": "华东地区", "script": "浙江省是中高考很卷的省份，并且十分重视编程，已经正式纳入浙江省高考。尽早开始学编程，高考时候的编程题对于孩子来说就是送分题，能在高考中跑赢一大波人。\n浙江省中招时有科技特长生招生政策的学校也很多，例如绍兴一中、杭州市萧山中学、杭州市萧山第三高级中学、姜山中学、台州市第一中学、北师大台州附中等等，这些中学有一部分在NOI成绩中表现很不错，拿下NOI国赛金牌，被选入国家集训队，就能直接保送清北！孩子走科技特长生路线，在中招里选择这类重点高中，可以赢在高考起跑线！"}, {"province": "浙江省", "city": "台州", "region": "华东地区", "script": "浙江省是中高考很卷的省份，并且十分重视编程，已经正式纳入浙江省高考。尽早开始学编程，高考时候的编程题对于孩子来说就是送分题，能在高考中跑赢一大波人。\n浙江省中招时有科技特长生招生政策的学校也很多，例如绍兴一中、杭州市萧山中学、杭州市萧山第三高级中学、姜山中学、台州市第一中学、北师大台州附中等等，这些中学有一部分在NOI成绩中表现很不错，拿下NOI国赛金牌，被选入国家集训队，就能直接保送清北！孩子走科技特长生路线，在中招里选择这类重点高中，可以赢在高考起跑线！"}, {"province": "浙江省", "city": "丽水", "region": "华东地区", "script": "浙江省是中高考很卷的省份，并且十分重视编程，已经正式纳入浙江省高考。尽早开始学编程，高考时候的编程题对于孩子来说就是送分题，能在高考中跑赢一大波人。\n浙江省中招时有科技特长生招生政策的学校也很多，例如绍兴一中、杭州市萧山中学、杭州市萧山第三高级中学、姜山中学、台州市第一中学、北师大台州附中等等，这些中学有一部分在NOI成绩中表现很不错，拿下NOI国赛金牌，被选入国家集训队，就能直接保送清北！孩子走科技特长生路线，在中招里选择这类重点高中，可以赢在高考起跑线！"}], grades: [{"grade": "一年级", "script": "升学占位型，中考前准备时间充裕，赛考经验丰富"}, {"grade": "二年级", "script": "升学占位型，中考前准备时间充裕，赛考经验丰富"}, {"grade": "三年级", "script": "升学占位型，中考前准备时间充裕，赛考经验丰富"}, {"grade": "四年级", "script": "升学占位型，中考前准备时间充裕，赛考经验丰富"}, {"grade": "五年级", "script": "升学占位型，中考前准备时间充裕，赛考经验丰富"}, {"grade": "六年级", "script": "升学占位型，中考前准备时间充裕，赛考经验丰富"}, {"grade": "初中", "script": "学习能力强，已有严谨的编程逻辑与抽象思维，为信息学竞赛、后续理科学习深耕抢占优势"}, {"grade": "初一", "script": "学习能力强，已有严谨的编程逻辑与抽象思维，为信息学竞赛、后续理科学习深耕抢占优势"}, {"grade": "初二", "script": "学习能力强，已有严谨的编程逻辑与抽象思维，为信息学竞赛、后续理科学习深耕抢占优势"}, {"grade": "初三", "script": "学习能力强，已有严谨的编程逻辑与抽象思维，为信息学竞赛、后续理科学习深耕抢占优势"}], stages: ["PythonⅠ", "PythonⅡ", "PythonⅢ"] };
+let PROVINCE_IMAGES = {"上海市": ["上海市_1.jpeg"], "云南省": ["云南省_1.jpeg"], "内蒙古自治区": ["内蒙古自治区_1.jpeg"], "北京市": ["北京市_1.jpeg", "北京市_2.jpeg"], "吉林省": ["吉林省_1.jpeg"], "四川省": ["四川省_1.jpeg", "四川省_2.jpeg"], "天津市": ["天津市_1.jpeg", "天津市_2.jpeg"], "宁夏回族自治区": ["宁夏回族自治区_1.jpeg"], "安徽省": ["安徽省_1.jpeg", "安徽省_2.jpeg"], "山东省": ["山东省_1.jpeg", "山东省_2.jpeg"], "山西省": ["山西省_1.jpeg"], "广东省": ["广东省_1.jpeg", "广东省_2.jpeg", "广东省_3.jpeg"], "广西壮族自治区": ["广西壮族自治区_1.jpeg", "广西壮族自治区_2.jpeg", "广西壮族自治区_3.jpeg"], "新疆维吾尔自治区": ["新疆维吾尔自治区_1.jpeg"], "江苏省": ["江苏省_1.jpeg", "江苏省_2.jpeg", "江苏省_3.jpeg"], "江西省": ["江西省_1.jpeg"], "河北省": ["河北省_1.jpeg", "河北省_2.jpeg", "河北省_3.jpeg"], "河南省": ["河南省_1.jpeg"], "浙江省": ["浙江省_1.jpeg", "浙江省_2.jpeg", "浙江省_3.jpeg"], "海南省": ["海南省_1.jpeg", "海南省_2.jpeg"], "湖北省": ["湖北省_1.jpeg", "湖北省_2.jpeg"], "湖南省": ["湖南省_1.jpeg", "湖南省_2.jpeg"], "甘肃省": ["甘肃省_1.jpeg"], "福建省": ["福建省_1.jpeg"], "贵州省": ["贵州省_1.jpeg", "贵州省_2.jpeg"], "辽宁省": ["辽宁省_1.jpeg"], "重庆市": ["重庆市_1.jpeg"], "陕西省": ["陕西省_1.jpeg"], "青海省": ["青海省_1.jpeg", "青海省_2.jpeg"], "黑龙江省": ["黑龙江省_1.jpeg"]};
+const PROVINCE_GROUPS = {
+  'A': ['安徽省','澳门特别行政区'],
+  'B': ['北京市'],
+  'C': ['重庆市'],
+  'F': ['福建省'],
+  'G': ['甘肃省','广东省','广西壮族自治区','贵州省'],
+  'H': ['海南省','河北省','河南省','黑龙江省','湖北省','湖南省','香港特别行政区'],
+  'J': ['吉林省','江苏省','江西省'],
+  'L': ['辽宁省'],
+  'N': ['内蒙古自治区','宁夏回族自治区'],
+  'Q': ['青海省'],
+  'S': ['山东省','山西省','陕西省','上海市','四川省'],
+  'T': ['天津市','台湾省'],
+  'X': ['西藏自治区','新疆维吾尔自治区'],
+  'Y': ['云南省'],
+  'Z': ['浙江省'],
+};
+
+// ========== DB ==========
+function openDB() {
+  return new Promise((res, rej) => {
+    const r = indexedDB.open(DB_NAME, 1);
+    r.onupgradeneeded = e => { if (!e.target.result.objectStoreNames.contains('s')) e.target.result.createObjectStore('s', { keyPath: 'id', autoIncrement: true }); };
+    r.onsuccess = e => { db = e.target.result; res(); };
+    r.onerror = e => rej(e.target.error);
+  });
+}
+function dbGetAll() {
+  return new Promise((res, rej) => {
+    const tx = db.transaction('s', 'readonly'); const r = tx.objectStore('s').getAll();
+    r.onsuccess = () => res(r.result); r.onerror = e => rej(e.target.error);
+  });
+}
+function dbGet(id) {
+  return new Promise((res, rej) => {
+    const r = db.transaction('s','readonly').objectStore('s').get(id);
+    r.onsuccess = () => res(r.result); r.onerror = e => rej(e.target.error);
+  });
+}
+function dbPut(s) {
+  return new Promise((res, rej) => {
+    const r = db.transaction('s','readwrite').objectStore('s').put(s);
+    r.onsuccess = () => { if (!s.id) s.id = r.result; res(s); };
+    r.onerror = e => rej(e.target.error);
+  });
+}
+function dbDel(id) {
+  return new Promise((res, rej) => {
+    const r = db.transaction('s','readwrite').objectStore('s').delete(id);
+    r.onsuccess = () => res(); r.onerror = e => rej(e.target.error);
+  });
+}
+
+// ========== DATA ==========
+let DEFAULT_IMAGE = '重庆市_1.jpeg';
+const DEFAULT_IMAGES = ['重庆市_1.jpeg'];
+const IMG_VERSION = 'v2';
+
+async function init() {
+  await openDB();
+  setupForms();
+  const all = await dbGetAll();
+  if (all.length > 0) {
+    refreshStudentPopover(all);
+    selectStudent(all[0]);
+  } else {
+    refreshStudentPopover([]);
+  }
+}
+
+function setupForms() {
+  // Modal grade dropdown
+  const gSel = qs('#mGrade');
+  gSel.innerHTML = DATA.grades.map(g => `<option value="${g.grade}">${g.grade}</option>`).join('');
+  // Modal stage
+  const sSel = qs('#mStage');
+  sSel.innerHTML = DATA.stages.map(s => `<option value="${s}">${s}</option>`).join('');
+  // Modal province - hidden select
+  const pSel = qs('#mProvince');
+  const provinces = [...new Set(DATA.cities.map(c => c.province))].sort();
+  pSel.innerHTML = '<option value="">请选择</option>' + provinces.map(p => `<option value="${p}">${p}</option>`).join('');
+  // Build custom province dropdown
+  buildProvinceDropdown();
+}
+
+function buildProvinceDropdown() {
+  const letters = Object.keys(PROVINCE_GROUPS).sort();
+  el('csProvinceLetters').innerHTML = letters.map(l => `<span onclick="scrollToLetter('${l}')">${l}</span>`).join('');
+  let listHtml = '';
+  for (const letter of letters) {
+    const provinces = PROVINCE_GROUPS[letter];
+    listHtml += `<div class="cs-group" data-letter="${letter}"><div class="cs-group-title">${letter}</div>`;
+    for (const p of provinces) {
+      listHtml += `<div class="cs-item" data-province="${p}" onclick="selectProvince('${p}')">${p}</div>`;
+    }
+    listHtml += '</div>';
+  }
+  el('csProvinceList').innerHTML = listHtml;
+}
+function toggleProvinceDropdown() {
+  const dd = el('csProvinceDropdown');
+  dd.style.display = dd.style.display === 'none' ? '' : 'none';
+  if (dd.style.display !== 'none') {
+    el('csProvinceSearch').value = '';
+    filterProvinces('');
+    setTimeout(() => el('csProvinceSearch').focus(), 50);
+    // click outside to close
+    setTimeout(() => {
+      document.addEventListener('click', function closeDD(e) {
+        if (!e.target.closest('#provinceSelectWrap')) {
+          dd.style.display = 'none';
+          document.removeEventListener('click', closeDD);
+        }
+      });
+    }, 10);
+  }
+}
+function selectProvince(p) {
+  el('mProvince').value = p;
+  el('csProvinceText').textContent = p || '请选择';
+  el('csProvinceDropdown').style.display = 'none';
+  // update selected style
+  qsa('.cs-item').forEach(item => item.classList.toggle('selected', item.dataset.province === p));
+  onModalProvince();
+}
+function filterProvinces(query) {
+  const q = query.trim().toLowerCase();
+  qsa('.cs-item').forEach(item => {
+    const visible = !q || item.textContent.toLowerCase().includes(q);
+    item.style.display = visible ? '' : 'none';
+  });
+  qsa('.cs-group').forEach(g => {
+    const hasVisible = g.querySelector('.cs-item:not([style*="display: none"])');
+    g.style.display = hasVisible ? '' : 'none';
+  });
+}
+function scrollToLetter(letter) {
+  const group = el('csProvinceList').querySelector(`[data-letter="${letter}"]`);
+  if (group) group.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function qs(s) { return document.querySelector(s); }
+function qsa(s) { return document.querySelectorAll(s); }
+function el(id) { return document.getElementById(id); }
+
+// ========== STUDENT POPOVER ==========
+function toggleStudentList() {
+  el('studentPop').classList.toggle('show');
+}
+function refreshStudentPopover(students) {
+  const pop = el('studentPop');
+  pop.innerHTML = students.map(s => `
+    <div class="sl-item ${s.id === currentId ? 'active' : ''}" onclick="selectStudentById(${s.id})">
+      <span>${s.name || '未命名'}</span>
+      <span class="sl-del" onclick="event.stopPropagation();deleteStudentById(${s.id})">×</span>
+    </div>
+  `).join('');
+  if (currentStudent) {
+    el('currentStudentLabel').textContent = currentStudent.name || '未命名';
+  } else {
+    el('currentStudentLabel').textContent = '选择学生';
+  }
+  // Close popover on outside click
+  setTimeout(() => {
+    document.addEventListener('click', function closePop(e) {
+      if (!e.target.closest('#studentPop') && !e.target.closest('#studentBtn')) {
+        el('studentPop').classList.remove('show');
+        document.removeEventListener('click', closePop);
+      }
+    });
+  }, 100);
+}
+
+// ========== STUDENT CRUD ==========
+async function selectStudentById(id) {
+  const s = await dbGet(id);
+  if (s) { selectStudent(s); el('studentPop').classList.remove('show'); }
+}
+async function selectStudent(s) {
+  currentId = s.id; currentStudent = { ...s };
+  if (!currentStudent.progress) currentStudent.progress = {};
+  el('emptyState').style.display = 'none';
+  el('reportContent').style.display = '';
+  renderReport();
+  const all = await dbGetAll();
+  refreshStudentPopover(all);
+}
+async function deleteStudentById(id) {
+  if (!confirm('确认删除？')) return;
+  await dbDel(id);
+  if (currentId === id) { currentId = null; currentStudent = null; el('emptyState').style.display = ''; el('reportContent').style.display = 'none'; }
+  const all = await dbGetAll();
+  refreshStudentPopover(all);
+  if (all.length > 0 && !currentStudent) selectStudent(all[0]);
+}
+
+// ========== MODAL ==========
+function showNewStudent() {
+  editMode = null;
+  el('modalTitle').textContent = '🌟 新建学生档案';
+  el('mName').value = '';
+  el('mGrade').value = DATA.grades[0]?.grade || '';
+  el('mStage').value = DATA.stages[DATA.stages.length - 1] || '';
+  el('mProvince').value = '';
+  el('csProvinceText').textContent = '请选择';
+  qsa('.cs-item').forEach(item => item.classList.remove('selected'));
+  el('mCity').innerHTML = '<option value="">请先选择省份</option>';
+  el('mRating').value = 5;
+  el('mRating').nextElementSibling.textContent = '🌟🌟🌟🌟🌟';
+  el('mAdvantage').value = '';
+  el('mTeacher').value = getDefaultTeacherName();
+  el('modalDeleteBtn').style.display = 'none';
+  // 默认能力值
+  resetAbilityDefaults();
+  el('abilityPanel').style.display = 'none';
+  el('abilityToggleIcon').textContent = '▶';
+  el('modalOverlay').style.display = '';
+}
+function showEditStudent() {
+  if (!currentStudent) return;
+  editMode = currentStudent.id;
+  el('modalTitle').textContent = '✏️ 编辑学生档案';
+  el('mName').value = currentStudent.name || '';
+  el('mGrade').value = currentStudent.grade || '';
+  el('mStage').value = currentStudent.stage || '';
+  el('mProvince').value = currentStudent.province || '';
+  el('csProvinceText').textContent = currentStudent.province || '请选择';
+  qsa('.cs-item').forEach(item => item.classList.toggle('selected', item.dataset.province === currentStudent.province));
+  onModalProvince();
+  setTimeout(() => { el('mCity').value = currentStudent.city || ''; }, 10);
+  el('mRating').value = currentStudent.rating || 5;
+  el('mRating').nextElementSibling.textContent = '🌟'.repeat(currentStudent.rating || 5);
+  el('mAdvantage').value = currentStudent.advantage || '';
+  el('mTeacher').value = currentStudent.teacherName || getDefaultTeacherName();
+  const a = getAbilities(currentStudent);
+  setAbilityInputs(a);
+  el('abilityPanel').style.display = 'none';
+  el('abilityToggleIcon').textContent = '▶';
+  el('modalDeleteBtn').style.display = '';
+  el('modalOverlay').style.display = '';
+}
+function closeModal() { el('modalOverlay').style.display = 'none'; }
+function getDefaultTeacherName() {
+  return localStorage.getItem('tt_teacherName') || '老师';
+}
+function setDefaultTeacherName(name) {
+  localStorage.setItem('tt_teacherName', name);
+}
+function getTeacherName(s) {
+  return (s && s.teacherName) || getDefaultTeacherName();
+}
+function showSettings() {
+  el('sTeacher').value = getDefaultTeacherName();
+  el('settingsOverlay').style.display = '';
+}
+function closeSettings() { el('settingsOverlay').style.display = 'none'; }
+function saveSettings() {
+  const name = el('sTeacher').value.trim();
+  if (name) setDefaultTeacherName(name);
+  closeSettings();
+  showToast('✅ 默认老师姓名已保存');
+}
+function onModalProvince() {
+  const p = el('mProvince').value;
+  const cSel = el('mCity');
+  cSel.innerHTML = '<option value="">请选择</option>' +
+    (p ? DATA.cities.filter(c => c.province === p).map(c => `<option value="${c.city}">${c.city}</option>`).join('') : '');
+}
+function toggleAbilityPanel() {
+  const panel = el('abilityPanel');
+  const icon = el('abilityToggleIcon');
+  if (panel.style.display === 'none') {
+    panel.style.display = '';
+    icon.textContent = '▼';
+  } else {
+    panel.style.display = 'none';
+    icon.textContent = '▶';
+  }
+}
+function setAbilityInputs(a) {
+  el('mAprog').value = a.编程基础; el('mAprogVal').textContent = a.编程基础 + '%'; el('mAprogVal').style.color = 'var(--emerald-light)';
+  el('mAalgo').value = a.算法思维; el('mAalgoVal').textContent = a.算法思维 + '%'; el('mAalgoVal').style.color = 'var(--cyan-light)';
+  el('mAcontest').value = a.竞赛经验; el('mAcontestVal').textContent = a.竞赛经验 + '%'; el('mAcontestVal').style.color = 'var(--purple-light)';
+  el('mAmath').value = a.数学基础; el('mAmathVal').textContent = a.数学基础 + '%'; el('mAmathVal').style.color = 'var(--pink-light)';
+  el('mAattitude').value = a.学习态度; el('mAattitudeVal').textContent = a.学习态度 + '%'; el('mAattitudeVal').style.color = 'var(--amber-light)';
+  el('mApotential').value = a.发展潜力; el('mApotentialVal').textContent = a.发展潜力 + '%'; el('mApotentialVal').style.color = 'var(--blue-light)';
+}
+function resetAbilityDefaults() {
+  const r = parseInt(el('mRating').value) || 5;
+  const defs = {
+    编程基础: Math.min(100, 60 + (r * 8)),
+    算法思维: Math.min(100, 40 + (r * 10)),
+    竞赛经验: Math.min(100, 30 + (r * 12)),
+    数学基础: Math.min(100, 50 + (r * 8)),
+    学习态度: Math.min(100, 70 + (r * 6)),
+    发展潜力: Math.min(100, 65 + (r * 7)),
+  };
+  setAbilityInputs(defs);
+}
+async function saveModalStudent() {
+  const s = {
+    name: el('mName').value || '未命名',
+    grade: el('mGrade').value,
+    stage: el('mStage').value,
+    province: el('mProvince').value,
+    city: el('mCity').value,
+    rating: parseInt(el('mRating').value),
+    advantage: el('mAdvantage').value,
+    teacherName: el('mTeacher').value || getDefaultTeacherName(),
+    abilities: {
+      编程基础: parseInt(el('mAprog').value),
+      算法思维: parseInt(el('mAalgo').value),
+      竞赛经验: parseInt(el('mAcontest').value),
+      数学基础: parseInt(el('mAmath').value),
+      学习态度: parseInt(el('mAattitude').value),
+      发展潜力: parseInt(el('mApotential').value),
+    },
+  };
+  if (editMode) {
+    s.id = editMode;
+    s.progress = currentStudent.progress || {};
+  } else {
+    s.progress = {};
+  }
+  await dbPut(s);
+  currentStudent = s;
+  currentId = s.id;
+  closeModal();
+  renderReport();
+  const all = await dbGetAll();
+  refreshStudentPopover(all);
+  el('emptyState').style.display = 'none';
+  el('reportContent').style.display = '';
+}
+async function deleteCurrentStudent() {
+  if (!currentId) return;
+  if (!confirm('确认删除？')) return;
+  await dbDel(currentId);
+  currentId = null; currentStudent = null;
+  closeModal();
+  el('emptyState').style.display = '';
+  el('reportContent').style.display = 'none';
+  const all = await dbGetAll();
+  refreshStudentPopover(all);
+  if (all.length > 0) selectStudent(all[0]);
+}
+
+// ========== REPORT RENDERING ==========
+function getRegionEntry() {
+  if (!currentStudent) return null;
+  // 先精确匹配省份+城市
+  const exact = DATA.cities.find(c => c.province === currentStudent.province && c.city === currentStudent.city);
+  if (exact) return exact;
+  // 回退：用该省份第一个城市的数据
+  return DATA.cities.find(c => c.province === currentStudent.province);
+}
+function getGradeEntry() {
+  if (!currentStudent) return null;
+  return DATA.grades.find(g => g.grade === currentStudent.grade);
+}
+
+function getGradeLevel(grade) {
+  const g = grade || '';
+  if (['一年级','二年级','三年级','四年级'].includes(g)) return { level: '启蒙黄金期', sub: '脑力开发的最佳窗口', color: 'var(--emerald)', colorLight: 'var(--emerald-light)' };
+  if (['五年级','六年级'].includes(g)) return { level: '能力跃升期', sub: '逻辑思维快速成长', color: 'var(--cyan)', colorLight: 'var(--cyan-light)' };
+  if (['初一','初二','初三','初中'].includes(g)) return { level: '竞赛冲刺期', sub: '把握升学关键节点', color: 'var(--purple)', colorLight: 'var(--purple-light)' };
+  return { level: '发展关键期', sub: '每一步都是未来的基石', color: 'var(--blue)', colorLight: 'var(--blue-light)' };
+}
+
+function getProgressForPhase(student, phaseIndex) {
+  if (!student.progress) return false;
+  return !!student.progress[phaseIndex];
+}
+
+// PRAISE RESOURCES
+const PRAISE_SETS = {
+  primary: [
+    { icon: '🧠', title: '逻辑思维突出', desc: '小小年纪就展现出超强的逻辑推理能力，这是编程学习最重要的天赋之一，很多成年人都不一定具备！', stars: 5 },
+    { icon: '🔥', title: '学习热情高涨', desc: '对编程充满好奇心和探索欲，主动学习的精神让人感动，这种内驱力是未来成功的关键。', stars: 5 },
+    { icon: '🏗️', title: '基础扎实稳固', desc: 'Python基础打得非常好，每一个知识点都掌握得很牢靠，为C++进阶铺平了道路。', stars: 5 },
+    { icon: '🎯', title: '专注力惊人', desc: '能够在编程中保持长时间高度专注，这在同龄人中非常罕见，是成为顶尖选手的必备品质。', stars: 5 },
+    { icon: '🔍', title: '善于发现问题', desc: '遇到bug不慌不忙，能冷静分析定位问题，这种调试能力是优秀程序员的标志。', stars: 4 },
+    { icon: '💡', title: '创造力丰富', desc: '不满足于照搬代码，总能提出自己独特的解法，这种创新思维难能可贵。', stars: 4 },
+  ],
+  middle: [
+    { icon: '🧠', title: '抽象思维成熟', desc: '已经具备严谨的编程逻辑与抽象思维能力，这在信息学竞赛中是决定性的优势。', stars: 5 },
+    { icon: '📐', title: '数理基础雄厚', desc: '扎实的数学功底为算法学习提供了强大支撑，这是冲击高级别竞赛的核心竞争力。', stars: 5 },
+    { icon: '🏃', title: '竞赛意识强', desc: '对竞赛规则和节奏有清晰认知，赛考经验在同龄人中处于领先水平。', stars: 5 },
+    { icon: '📚', title: '自学能力强', desc: '能够自主查阅资料、攻克难题，这种独立学习能力将伴随整个学术生涯。', stars: 5 },
+    { icon: '🔬', title: '善于深度思考', desc: '不满足于表面解法，总在追问"为什么"，这种探究精神难得可贵。', stars: 4 },
+    { icon: '🌟', title: '潜力不可限量', desc: '当前表现已经非常出色，但更大的潜力还在后面，进步空间令人期待。', stars: 5 },
+  ]
+};
+
+function getPraises(student) {
+  const isPrimary = ['一年级','二年级','三年级','四年级','五年级','六年级'].includes(student.grade);
+  return isPrimary ? PRAISE_SETS.primary : PRAISE_SETS.middle;
+}
+
+function renderReport() {
+  if (!currentStudent) return;
+  const s = currentStudent;
+  const region = getRegionEntry();
+  const grade = getGradeEntry();
+  const gl = getGradeLevel(s.grade);
+  const stars = '🌟'.repeat(s.rating);
+  const regionName = region ? region.region : '未知地区';
+  const regionAnalysis = region?.script || '';
+  const gradeScript = grade?.script || '';
+  const advantage = s.advantage || '拥有扎实的编程基础，经过系统化训练展现出优秀的代码能力和竞赛潜力，学习主动性强，成长空间巨大！';
+  const praises = getPraises(s);
+
+  // Province images
+  const pImgs = PROVINCE_IMAGES[s.province] || [];
+  const imgList = Array.isArray(pImgs) ? pImgs : [pImgs.policy_img, pImgs.noi_img].filter(Boolean);
+  
+  // Filter out default images; if no policy images remain, show single default
+  const policyImgs = imgList.filter(img => !DEFAULT_IMAGES.includes(img));
+  const displayImages = policyImgs.length > 0 ? policyImgs : [DEFAULT_IMAGE];
+  const policyTitle = policyImgs.length > 0 ? `📋 ${s.province} 科技特长生招生政策` : '一张图看懂信奥升学路线';
+
+  el('reportContent').innerHTML = `
+    <!-- HERO -->
+    <div class="hero">
+      <img src="https://abd54fa3716c437c9e5b42314d294317.app.codebuddy.work/assets/images/logo.png" class="hero-logo" alt="核桃编程" />
+      <div class="badge">🎓 科技特长生成长规划</div>
+      <div class="hero-name">${s.name}</div>
+      <div class="hero-slogan">✨ 每一个孩子都是独一无二的未来之星，我们看见你的光芒 ✨</div>
+      <div class="hero-stats">
+        <div class="stat-item"><div class="stat-value">${gl.level}</div><div class="stat-label">成长阶段</div></div>
+        <div class="stat-item"><div class="stat-value">${s.stage || '—'}</div><div class="stat-label">当前水平</div></div>
+        <div class="stat-item"><div class="stat-value">${s.rating}/5</div><div class="stat-label">综合评分</div></div>
+      </div>
+      <div class="hero-info-chips">
+        <div class="info-chip">
+          <div class="chip-dot" style="background:${gl.color}"></div>
+          <span class="chip-label">年级</span>
+          <span class="chip-value">${s.grade}</span>
+        </div>
+        <div class="info-chip">
+          <div class="chip-dot" style="background:${gl.color}"></div>
+          <span class="chip-label">阶段</span>
+          <span class="chip-value">${s.stage}</span>
+        </div>
+        <div class="info-chip">
+          <div class="chip-dot" style="background:var(--cyan)"></div>
+          <span class="chip-label">地区</span>
+          <span class="chip-value">${s.province}·${s.city}</span>
+        </div>
+        <div class="info-chip">
+          <div class="chip-dot" style="background:var(--amber)"></div>
+          <span class="chip-label">归属</span>
+          <span class="chip-value">${regionName}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 综合评估：老师点评 + 能力评估 合并 -->
+    <div class="section-title">
+      <div class="s-icon" style="background:rgba(236,72,153,0.15);color:var(--pink-light)">⭐</div>
+      <span>${getTeacherName(s)}眼中的 ${s.name}</span>
+      <span style="margin:0 8px;color:var(--text3)">|</span>
+      <span style="color:var(--purple-light)">📊 能力评估</span>
+    </div>
+    <div class="card combined-evaluation-card" style="padding:20px">
+      <div class="evaluation-row">
+        <!-- 左侧：赞美卡片 -->
+        <div class="evaluation-left">
+          <div class="praise-grid praise-grid-compact">
+            ${praises.map(p => `
+              <div class="praise-card praise-card-compact">
+                <div class="p-icon">${p.icon}</div>
+                <div class="p-title">${p.title}</div>
+                <div class="p-desc">${p.desc}</div>
+                <div class="p-stars">${'⭐'.repeat(p.stars)}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+        <!-- 右侧：能力条 + 雷达图 -->
+        <div class="evaluation-right">
+          <div class="ability-bars-compact">${renderBars(s)}</div>
+          <div class="radar-wrap">${renderRadarSVG(s, 180)}</div>
+        </div>
+      </div>
+      <!-- 综合评价：平铺底部全宽 -->
+      <div class="evaluation-summary-full">
+        <div style="font-size:24px">💬</div>
+        <div>
+          <div style="font-size:13px;font-weight:700;margin-bottom:4px;color:var(--pink-light)">综合评价</div>
+          <div style="font-size:12px;color:var(--text);line-height:1.7">${gradeScript}${advantage}</div>
+          <div style="margin-top:6px;font-size:18px;letter-spacing:2px">${stars}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 地区分析 + 政策图片 -->
+    <div class="section-title">
+      <div class="s-icon" style="background:rgba(6,182,212,0.15);color:var(--cyan-light)">🗺️</div>
+      <span>${s.province}${s.city} · 升学环境分析</span>
+    </div>
+    ${regionAnalysis ? `
+    <div class="region-analysis-box">
+      <div class="region-analysis-icon">📍</div>
+      <div class="region-analysis-text">${regionAnalysis.replace(/\n/g, '<br>')}</div>
+    </div>` : ''}
+    ${displayImages.length ? `
+    <div class="policy-img-section">
+      <div class="policy-img-title-bar">
+        <div class="policy-img-title-icon">${policyImgs.length > 0 ? '📋' : '📈'}</div>
+        <div class="policy-img-title-text">${policyTitle}</div>
+      </div>
+      <div class="policy-img-row">
+        ${displayImages.map((img, i) => `
+        <div class="policy-img-col">
+          <div class="policy-img-box">
+            <img src="https://abd54fa3716c437c9e5b42314d294317.app.codebuddy.work/assets/images/${img}?${IMG_VERSION}" alt="${s.province}政策" loading="lazy" />
+          </div>
+        </div>
+        `).join('')}
+      </div>
+    </div>` : ''}
+
+    <!-- 给家长的建议 -->
+    <div class="section-title">
+      <div class="s-icon" style="background:rgba(16,185,129,0.15);color:var(--emerald-light)">👨‍👩‍👧</div>
+      <span>给家长的三个锦囊</span>
+    </div>
+    <div class="parent-cards">
+      <div class="parent-card">
+        <div class="pc-num">01</div>
+        <div class="pc-title">📖 了解政策，抢占先机</div>
+        <div class="pc-text">紧跟教育政策导向，关注${s.province}等一线城市的科技特长生动态。信息学奥赛赛道正在快速崛起，早一步了解就多一份把握。${s.province}作为${regionName}的重要省份，科技特长生政策正在不断完善，是最值得把握的升学红利。</div>
+      </div>
+      <div class="parent-card">
+        <div class="pc-num">02</div>
+        <div class="pc-title">⏰ 持续投入，切勿中断</div>
+        <div class="pc-text">编程学习贵在坚持。${s.name}目前正处于${gl.level}，这是${gl.sub}。保持每周稳定练习，中间一定不要中断，持续投入将带来指数级的成长回报。已经在Python阶段打下了坚实基础，接下来C++的过渡会更加顺畅。</div>
+      </div>
+      <div class="parent-card">
+        <div class="pc-num">03</div>
+        <div class="pc-title">🏅 以赛代练，步步为营</div>
+        <div class="pc-text">合理安排竞赛节奏：先参加图灵杯等入门赛事建立信心，再挑战白名单赛项和GESP认证，最终瞄准CSP-J/S组竞赛。每一次比赛都是宝贵的成长机会，比赛结果不是唯一，重要的是${s.name}在过程中学到的东西。</div>
+      </div>
+    </div>
+
+    <!-- 底部寄语 -->
+    <div class="footer-message">
+      <div class="footer-message-icon">🌟</div>
+      <div class="footer-message-text">每一个孩子都是一颗种子</div>
+      <div class="footer-message-sub">只要给对阳光和土壤，终将长成参天大树</div>
+      <div class="footer-message-name">${s.name}，未来可期！</div>
+    </div>
+  `;
+}
+
+// 能力维度默认计算
+function getDefaultAbilities(s) {
+  const r = s.rating || 5;
+  return {
+    编程基础: Math.min(100, 60 + (r * 8)),
+    算法思维: Math.min(100, 40 + (r * 10)),
+    竞赛经验: Math.min(100, 30 + (r * 12)),
+    数学基础: Math.min(100, 50 + (r * 8)),
+    学习态度: Math.min(100, 70 + (r * 6)),
+    发展潜力: Math.min(100, 65 + (r * 7)),
+  };
+}
+function getAbilities(s) {
+  const defs = getDefaultAbilities(s);
+  if (!s.abilities) return defs;
+  const a = s.abilities;
+  return {
+    编程基础: a.编程基础 ?? defs.编程基础,
+    算法思维: a.算法思维 ?? defs.算法思维,
+    竞赛经验: a.竞赛经验 ?? defs.竞赛经验,
+    数学基础: a.数学基础 ?? defs.数学基础,
+    学习态度: a.学习态度 ?? defs.学习态度,
+    发展潜力: a.发展潜力 ?? defs.发展潜力,
+  };
+}
+
+function renderBars(s) {
+  const a = getAbilities(s);
+  const bars = [
+    { label: '编程基础', val: a.编程基础, color: 'var(--emerald)' },
+    { label: '算法思维', val: a.算法思维, color: 'var(--cyan)' },
+    { label: '竞赛经验', val: a.竞赛经验, color: 'var(--purple)' },
+    { label: '数学基础', val: a.数学基础, color: 'var(--pink)' },
+    { label: '学习态度', val: a.学习态度, color: 'var(--amber)' },
+    { label: '发展潜力', val: a.发展潜力, color: 'var(--blue)' },
+  ];
+  return bars.map(b => `
+    <div class="bar-group">
+      <div class="bar-label-row"><span class="bar-label">${b.label}</span><span class="bar-pct">${b.val}%</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:${b.val}%;background:${b.color}"></div></div>
+    </div>
+  `).join('');
+}
+
+function renderRadarSVG(s, size = 260) {
+  const a = getAbilities(s);
+  const dimensions = [
+    { name: '编程基础', score: Math.min(5, a.编程基础 / 20) },
+    { name: '算法思维', score: Math.min(5, a.算法思维 / 20) },
+    { name: '竞赛经验', score: Math.min(5, a.竞赛经验 / 20) },
+    { name: '学习态度', score: Math.min(5, a.学习态度 / 20) },
+    { name: '数学基础', score: Math.min(5, a.数学基础 / 20) },
+    { name: '发展潜力', score: Math.min(5, a.发展潜力 / 20) },
+  ];
+  const cx = 130, cy = 130, r = 100, n = dimensions.length;
+  const slice = (2 * Math.PI) / n;
+  function pt(i, ratio) {
+    const a = slice * i - Math.PI / 2;
+    return { x: cx + r * ratio * Math.cos(a), y: cy + r * ratio * Math.sin(a) };
+  }
+  let svg = '';
+  // Grid
+  for (let lv = 1; lv <= 5; lv++) {
+    const pts = [];
+    for (let i = 0; i < n; i++) { const p = pt(i, lv/5); pts.push(`${p.x},${p.y}`); }
+    svg += `<polygon points="${pts.join(' ')}" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>`;
+  }
+  // Axes
+  for (let i = 0; i < n; i++) {
+    const p = pt(i, 1);
+    svg += `<line x1="${cx}" y1="${cy}" x2="${p.x}" y2="${p.y}" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>`;
+  }
+  // Data area + points
+  const dataPts = dimensions.map((d, i) => pt(i, d.score / 5));
+  svg += `<polygon points="${dataPts.map(p => `${p.x},${p.y}`).join(' ')}" fill="rgba(124,58,237,0.15)" stroke="var(--purple)" stroke-width="2"/>`;
+  dataPts.forEach(p => {
+    svg += `<circle cx="${p.x}" cy="${p.y}" r="5" fill="var(--purple-light)"/><circle cx="${p.x}" cy="${p.y}" r="3" fill="#fff"/>`;
+  });
+  // Labels
+  dimensions.forEach((d, i) => {
+    const p = pt(i, 1.25);
+    svg += `<text x="${p.x}" y="${p.y}" text-anchor="middle" dominant-baseline="middle" fill="var(--text2)" font-size="10" font-weight="600">${d.name}</text>`;
+    const p2 = pt(i, 1.10);
+    svg += `<text x="${p2.x}" y="${p2.y + 10}" text-anchor="middle" fill="var(--purple-light)" font-size="9" font-weight="700">${d.score.toFixed(1)}/5</text>`;
+  });
+  return `<svg width="${size}" height="${size}" viewBox="0 0 260 260">${svg}</svg>`;
+}
+
+// ========== PHASE TOGGLE (legacy, kept for data compatibility) ==========
+async function togglePhase(index) { }
+
+// ========== SCREENSHOT ==========
+async function screenshotReport() {
+  const el = document.getElementById('reportContent');
+  if (!el || el.style.display === 'none') { showToast('⚠️ 请先选择或创建学生档案'); return; }
+  const btn = document.getElementById('screenshotBtn');
+  const origText = btn.textContent;
+  btn.textContent = '⏳ 生成中...';
+  btn.disabled = true;
+
+  try {
+    const topBar = document.getElementById('topBar');
+    const editHints = el.querySelectorAll('.edit-hint');
+    topBar.style.display = 'none';
+    editHints.forEach(b => b.style.display = 'none');
+    el.style.paddingTop = '40px';
+    el.style.backgroundColor = '#0a0b14'; // 确保截图区域背景色一致
+
+    const canvas = await html2canvas(el, {
+      backgroundColor: '#0a0b14',
+      scale: 2,
+      useCORS: true,
+      logging: false,
+      onclone: (clonedDoc) => {
+        // 修复 html2canvas 深色背景截图时的白色边缘 bug
+        const wrapper = clonedDoc.getElementById('reportContent');
+        if (wrapper) {
+          wrapper.style.backgroundColor = '#0a0b14';
+          wrapper.style.padding = '40px';
+        }
+        // 给所有卡片和 hero 添加明确深色背景，覆盖 border-radius 产生的白色像素
+        const cards = clonedDoc.querySelectorAll('.card, .hero, .policy-img-box, .praise-card, .parent-card, .region-analysis-box, .policy-img-section, .footer-message');
+        cards.forEach(c => {
+          if (c.classList.contains('hero')) {
+            c.style.background = '#14152a';
+            c.style.backgroundImage = 'none';
+            // 用纯色 div 覆盖 hero 的 glow 伪元素，防止截图时出现亮色异常
+            const glow = document.createElement('div');
+            glow.style.cssText = 'position:absolute;inset:0;background:#14152a;z-index:-1;';
+            c.insertBefore(glow, c.firstChild);
+          } else if (c.classList.contains('praise-card') || c.classList.contains('parent-card')) {
+            c.style.backgroundColor = '#1f2245';
+          } else if (c.classList.contains('region-analysis-box') || c.classList.contains('footer-message')) {
+            c.style.backgroundColor = '#1f2245';
+          } else if (c.classList.contains('policy-img-section')) {
+            c.style.backgroundColor = '#1a1c38';
+            const titleBar = c.querySelector('.policy-img-title-bar');
+            if (titleBar) titleBar.style.backgroundColor = '#1f2245';
+          } else {
+            c.style.backgroundColor = '#1a1c38';
+          }
+        });
+        // 给 hero logo 添加深色背景色，确保透明PNG在截图中正常显示
+        const heroLogos = clonedDoc.querySelectorAll('.hero-logo');
+        heroLogos.forEach(l => {
+          // 白色logo在深色背景上可见，不需要额外背景色
+          l.style.backgroundColor = 'transparent';
+        });
+        // 固定 grid 布局，防止截图时列数变化导致卡片被压缩
+        const parentCards = clonedDoc.querySelectorAll('.parent-cards, .praise-grid, .praise-grid-compact');
+        parentCards.forEach(g => {
+          if (g.classList.contains('praise-grid-compact')) {
+            g.style.gridTemplateColumns = 'repeat(2, 1fr)';
+          } else {
+            g.style.gridTemplateColumns = 'repeat(3, 1fr)';
+          }
+        });
+        // 固定合并评估区域为横向布局
+        const evalRows = clonedDoc.querySelectorAll('.evaluation-row');
+        evalRows.forEach(r => { r.style.flexDirection = 'row'; });
+        const evalRights = clonedDoc.querySelectorAll('.evaluation-right');
+        evalRights.forEach(e => {
+          e.style.borderLeft = '1px solid rgba(255,255,255,0.08)';
+          e.style.borderTop = 'none';
+          e.style.paddingLeft = '20px';
+          e.style.paddingTop = '0';
+        });
+
+        // 移除所有文字渐变效果（html2canvas 对 -webkit-background-clip:text 支持不佳，会渲染成白色或亮色）
+        const gradTexts = clonedDoc.querySelectorAll('.hero-name, .hero-slogan, .stat-value');
+        gradTexts.forEach(t => {
+          t.style.background = 'none';
+          t.style.webkitBackgroundClip = 'initial';
+          t.style.webkitTextFillColor = 'initial';
+          if (t.classList.contains('hero-name')) t.style.color = '#c4b5fd';
+          else if (t.classList.contains('stat-value')) t.style.color = '#c4b5fd';
+          else t.style.color = '#e8eaf6';
+        });
+      }
+    });
+
+    // 用深色边框覆盖截图边缘可能残留的白色像素
+    const ctx = canvas.getContext('2d');
+    ctx.strokeStyle = '#0a0b14';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(0, 0, canvas.width, canvas.height);
+
+    // Restore UI
+    topBar.style.display = '';
+    editHints.forEach(b => b.style.display = '');
+    el.style.paddingTop = '';
+    el.style.backgroundColor = '';
+
+    // Copy to clipboard (优先) + 下载(备选)
+    canvas.toBlob(async (blob) => {
+      const fileName = `科技特长生规划报告_${currentStudent?.name || 'report'}.png`;
+      let clipboardOk = false;
+      // 方案1: ClipboardItem (Chrome/Edge/Safari 较新版本)
+      if (navigator.clipboard && navigator.clipboard.write && typeof ClipboardItem !== 'undefined') {
+        try {
+          await navigator.clipboard.write([
+            new ClipboardItem({ 'image/png': blob })
+          ]);
+          clipboardOk = true;
+          showToast('✅ 截图已复制到剪贴板！可直接 Ctrl+V 粘贴到微信/文档');
+        } catch (e) {
+          console.warn('ClipboardItem write failed:', e);
+        }
+      }
+      // 方案2: 备用 - 同时下载文件，确保用户一定能拿到图片
+      if (!clipboardOk) {
+        try {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = fileName;
+          a.click();
+          URL.revokeObjectURL(url);
+          showToast('📥 截图已下载（浏览器不支持自动复制，请手动插入图片）');
+        } catch (e2) {
+          showToast('❌ 截图保存失败，请重试');
+        }
+      }
+    }, 'image/png');
+  } catch (e) {
+    console.error('Screenshot failed:', e);
+    showToast('❌ 截图失败，请重试');
+  } finally {
+    btn.textContent = origText;
+    btn.disabled = false;
+  }
+}
+
+// ========== IMPORT/EXPORT ==========
+async function exportStudents() {
+  const all = await dbGetAll();
+  if (!all.length) { alert('暂无数据'); return; }
+  const blob = new Blob([JSON.stringify(all, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = `科技特长生档案_${new Date().toISOString().slice(0,10)}.json`; a.click();
+}
+function importStudents() {
+  const inp = document.createElement('input'); inp.type = 'file'; inp.accept = '.json';
+  inp.onchange = async e => {
+    const f = e.target.files[0]; if (!f) return;
+    try {
+      const data = JSON.parse(await f.text());
+      if (!Array.isArray(data)) { alert('格式错误'); return; }
+      let n = 0;
+      for (const s of data) { if (s.name) { delete s.id; await dbPut(s); n++; } }
+      const all = await dbGetAll();
+      refreshStudentPopover(all);
+      if (all.length > 0 && !currentStudent) selectStudent(all[0]);
+      alert(`成功导入 ${n} 份档案`);
+    } catch (err) { alert('导入失败: ' + err.message); }
+  };
+  inp.click();
+}
+
+// ========== DEMO ==========
+async function loadDemoStudent() {
+  const demo = {
+    name: '沈沐泽',
+    grade: '四年级',
+    stage: 'PythonⅢ',
+    province: '河南省',
+    city: '郑州',
+    rating: 5,
+    advantage: '拥有扎实的Python编程基础，经过了长期系统的代码训练，逻辑思维能力远超同龄人。校内各科成绩优异，数学尤其突出，知识储备量充足。在编程学习中展现出极强的专注力和创造力，赛考经验丰富，面对挑战从不退缩！',
+    progress: { 0: true, 1: true }
+  };
+  await dbPut(demo);
+  selectStudent(demo);
+  const all = await dbGetAll();
+  refreshStudentPopover(all);
+  el('emptyState').style.display = 'none';
+  el('reportContent').style.display = '';
+}
+
+// ========== START ==========
+document.addEventListener('click', e => {
+  if (!e.target.closest('#studentPop') && !e.target.closest('#studentBtn')) {
+    el('studentPop').classList.remove('show');
+  }
+});
+
+// Double-click anywhere on report to edit
+el('reportContent').addEventListener('dblclick', e => {
+  if (currentStudent) showEditStudent();
+});
+
+el('modalOverlay').addEventListener('click', e => {
+  if (e.target === el('modalOverlay')) closeModal();
+});
+
+// Keyboard shortcut
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+  if (e.metaKey || e.ctrlKey) {
+    if (e.key === 'n') { e.preventDefault(); showNewStudent(); }
+    if (e.key === 'e' && currentStudent) { e.preventDefault(); showEditStudent(); }
+  }
+});
+
+// ========== TOAST ==========
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+init();
+</script>
+</body>
+</html>
